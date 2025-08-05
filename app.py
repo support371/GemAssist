@@ -164,13 +164,17 @@ def news():
 
 @app.route('/teams')
 def teams():
-    """Team members and structure"""
+    """Leadership and team members structure"""
     team_data = get_notion_team_data()
     cybersecurity_team, real_estate_team = categorize_team_members(team_data)
     
+    # Get the Notion database ID for embedding
+    notion_database_id = os.environ.get("NOTION_DATABASE_ID", "")
+    
     return render_template('teams.html', 
                          cybersecurity_team=cybersecurity_team,
-                         real_estate_team=real_estate_team)
+                         real_estate_team=real_estate_team,
+                         database_id=notion_database_id)
 
 @app.route('/investment-portfolio')
 def investment_portfolio():
