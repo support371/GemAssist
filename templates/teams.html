@@ -169,80 +169,183 @@
             </div>
         </div>
         
-        {% if cybersecurity_team %}
         <div class="row mb-5">
             <div class="col-12">
                 <h3 class="mb-4">
                     <i class="fas fa-shield-alt text-primary me-2"></i>
-                    Cybersecurity Division
+                    Cybersecurity Leadership
                 </h3>
             </div>
-            {% for member in cybersecurity_team %}
+            
+            <!-- John Doe - Cybersecurity Director -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="team-member-card">
-                    {% if member.image %}
-                    <img src="{{ member.image }}" alt="{{ member.name }}" class="team-member-avatar">
-                    {% else %}
                     <div class="team-member-avatar bg-primary d-flex align-items-center justify-content-center">
-                        <i class="fas fa-user fa-2x text-white"></i>
+                        <i class="fas fa-shield-alt fa-2x text-white"></i>
                     </div>
-                    {% endif %}
-                    <h5 class="team-member-name">{{ member.name }}</h5>
-                    <p class="team-member-position">{{ member.position }}</p>
-                    {% if member.department %}
-                    <span class="team-member-department">{{ member.department }}</span>
-                    {% endif %}
-                    {% if member.bio %}
-                    <p class="team-member-bio">{{ member.bio }}</p>
-                    {% endif %}
-                    {% if member.email %}
-                    <a href="mailto:{{ member.email }}" class="btn btn-sm btn-outline-primary">
-                        <i class="fas fa-envelope me-1"></i>Contact
-                    </a>
-                    {% endif %}
+                    <h5 class="team-member-name">John Doe</h5>
+                    <p class="team-member-position">Cybersecurity Director</p>
+                    <span class="team-member-department">Cybersecurity</span>
+                    <p class="team-member-bio">Oversees threat intelligence operations and system security audits across financial and real estate channels.</p>
+                    <div class="contact-links">
+                        <a href="mailto:johndoe@gemcybersecurityassist.com" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </a>
+                        <a href="https://t.me/johndoe" class="btn btn-sm btn-outline-info">
+                            <i class="fab fa-telegram me-1"></i>Telegram
+                        </a>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
+            
+            <!-- Victor Chinemelomu - Chief Compliance & Intelligence Officer -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="team-member-card">
+                    <div class="team-member-avatar bg-warning d-flex align-items-center justify-content-center">
+                        <i class="fas fa-user-shield fa-2x text-white"></i>
+                    </div>
+                    <h5 class="team-member-name">Victor Chinemelomu</h5>
+                    <p class="team-member-position">Chief Compliance & Intelligence Officer</p>
+                    <span class="team-member-department bg-warning">Cybersecurity</span>
+                    <p class="team-member-bio">Directs client regulatory intake, fraud detection systems, and ensures alignment with KYC/AML frameworks globally.</p>
+                    <div class="contact-links">
+                        <a href="mailto:chinemelomu@gemcybersecurityassist.com" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </a>
+                        <a href="https://t.me/gemintell" class="btn btn-sm btn-outline-info">
+                            <i class="fab fa-telegram me-1"></i>Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sophia Martinez - Director of Financial Recovery Operations -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="team-member-card">
+                    <div class="team-member-avatar bg-danger d-flex align-items-center justify-content-center">
+                        <i class="fas fa-search-dollar fa-2x text-white"></i>
+                    </div>
+                    <h5 class="team-member-name">Sophia Martinez</h5>
+                    <p class="team-member-position">Director of Financial Recovery Operations</p>
+                    <span class="team-member-department bg-danger">Cybersecurity</span>
+                    <p class="team-member-bio">Manages digital asset tracing, evidence reporting for victims, and legal documentation flows with partner institutions.</p>
+                    <div class="contact-links">
+                        <a href="mailto:sophia@gemcybersecurityassist.com" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </a>
+                        <a href="https://t.me/sophiarecovery" class="btn btn-sm btn-outline-info">
+                            <i class="fab fa-telegram me-1"></i>Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Eric Lin - AI Systems Architect -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="team-member-card">
+                    <div class="team-member-avatar bg-info d-flex align-items-center justify-content-center">
+                        <i class="fas fa-robot fa-2x text-white"></i>
+                    </div>
+                    <h5 class="team-member-name">Eric Lin</h5>
+                    <p class="team-member-position">AI Systems Architect</p>
+                    <span class="team-member-department bg-info">Cybersecurity</span>
+                    <p class="team-member-bio">Designs automation pipelines and AI-assisted compliance analytics integrated into the GEM platform backend.</p>
+                    <div class="contact-links">
+                        <a href="mailto:ericlin@gemcybersecurityassist.com" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </a>
+                        <a href="https://t.me/ai_eric" class="btn btn-sm btn-outline-info">
+                            <i class="fab fa-telegram me-1"></i>Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-        {% endif %}
         
-        {% if real_estate_team %}
         <div class="row mb-5">
             <div class="col-12">
                 <h3 class="mb-4">
                     <i class="fas fa-home text-success me-2"></i>
-                    Real Estate Division
+                    Real Estate Division - Alliance Trust Realty LLC
                 </h3>
             </div>
-            {% for member in real_estate_team %}
+            
+            <!-- Jane Smith - Real Estate Consultant -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="team-member-card">
-                    {% if member.image %}
-                    <img src="{{ member.image }}" alt="{{ member.name }}" class="team-member-avatar">
-                    {% else %}
                     <div class="team-member-avatar bg-success d-flex align-items-center justify-content-center">
-                        <i class="fas fa-user fa-2x text-white"></i>
+                        <i class="fas fa-home fa-2x text-white"></i>
                     </div>
-                    {% endif %}
-                    <h5 class="team-member-name">{{ member.name }}</h5>
-                    <p class="team-member-position">{{ member.position }}</p>
-                    {% if member.department %}
-                    <span class="team-member-department bg-success">{{ member.department }}</span>
-                    {% endif %}
-                    {% if member.bio %}
-                    <p class="team-member-bio">{{ member.bio }}</p>
-                    {% endif %}
-                    {% if member.email %}
-                    <a href="mailto:{{ member.email }}" class="btn btn-sm btn-outline-success">
-                        <i class="fas fa-envelope me-1"></i>Contact
-                    </a>
-                    {% endif %}
+                    <h5 class="team-member-name">Jane Smith</h5>
+                    <p class="team-member-position">Real Estate Consultant</p>
+                    <span class="team-member-department bg-success">Real Estate</span>
+                    <p class="team-member-bio">Leads property investment strategy and integrated leasing partnerships under ATR LLC.</p>
+                    <div class="contact-links">
+                        <a href="mailto:janesmith@alliancetrustrealty.com" class="btn btn-sm btn-outline-success me-2">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </a>
+                        <a href="https://t.me/janesmith" class="btn btn-sm btn-outline-info">
+                            <i class="fab fa-telegram me-1"></i>Telegram
+                        </a>
+                    </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        {% endif %}
-        {% endif %}
+        
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="mb-4">
+                    <i class="fas fa-gavel text-secondary me-2"></i>
+                    Legal & Compliance Division
+                </h3>
+            </div>
+            
+            <!-- Angela Robinson - Legal & Regulatory Liaison Officer -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="team-member-card">
+                    <div class="team-member-avatar bg-secondary d-flex align-items-center justify-content-center">
+                        <i class="fas fa-balance-scale fa-2x text-white"></i>
+                    </div>
+                    <h5 class="team-member-name">Angela Robinson</h5>
+                    <p class="team-member-position">Legal & Regulatory Liaison Officer</p>
+                    <span class="team-member-department bg-secondary">Legal & Compliance</span>
+                    <p class="team-member-bio">Coordinates with regulatory bodies, compliance attorneys, and handles contract vetting for recovery and real estate services.</p>
+                    <div class="contact-links">
+                        <a href="mailto:angela@gemcybersecurityassist.com" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </a>
+                        <a href="https://t.me/legalangel" class="btn btn-sm btn-outline-info">
+                            <i class="fab fa-telegram me-1"></i>Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Notion Dashboard Embed -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="notion-dashboard-section">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-users me-2"></i>
+                        Live Team Dashboard
+                    </h2>
+                    <p class="text-center text-muted mb-4">
+                        Explore our active board members, cybersecurity advisors, real estate consultants, and technical leads powering the GEM platform.
+                    </p>
+                    <div class="notion-embed-container">
+                        <iframe 
+                            src="https://www.notion.so/GEM-ATR-Master-Dashboard-232b5b56eac280ab9d3cfcbf2eff87a8?v=22fb5b56eac28027acbd000c35b0f82b" 
+                            width="100%" 
+                            height="600" 
+                            frameborder="0" 
+                            allowfullscreen
+                            style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="row mt-5">
             <div class="col-12">
