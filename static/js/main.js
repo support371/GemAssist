@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeForms();
     initializeAnimations();
     initializeTheme();
+    initializeLiveChat();
     
     // Navigation functionality
     function initializeNavigation() {
@@ -22,13 +23,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                const href = this.getAttribute('href');
+                if (href && href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 }
             });
         });
@@ -436,10 +440,60 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initializePerformanceMonitoring();
     
+    // Live Chat System
+    function initializeLiveChat() {
+        const liveChatButton = document.getElementById('liveChatButton');
+        const liveChatModal = document.getElementById('liveChatModal');
+        
+        if (liveChatButton && liveChatModal) {
+            // Initialize Bootstrap modal
+            const modal = new bootstrap.Modal(liveChatModal);
+            
+            // Open chat modal when button is clicked
+            liveChatButton.addEventListener('click', function() {
+                modal.show();
+                console.log('Live chat initiated by user');
+            });
+            
+            // Animate the chat button periodically
+            setInterval(function() {
+                liveChatButton.style.transform = 'scale(1.05)';
+                setTimeout(function() {
+                    liveChatButton.style.transform = 'scale(1)';
+                }, 200);
+            }, 8000);
+            
+            // Show chat button after a delay
+            setTimeout(function() {
+                liveChatButton.style.opacity = '1';
+                liveChatButton.style.transform = 'translateY(0)';
+            }, 3000);
+            
+            // Hide tooltip on mobile
+            if (window.innerWidth <= 768) {
+                const tooltip = liveChatButton.querySelector('.chat-tooltip');
+                if (tooltip) {
+                    tooltip.style.display = 'none';
+                }
+            }
+        }
+        
+        // Emergency contact tracking
+        const emergencyButtons = document.querySelectorAll('.btn-danger[href^="tel:"], .btn-danger[href^="mailto:"]');
+        emergencyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                console.log('Emergency contact initiated:', this.href);
+            });
+        });
+    }
+
     // Console security message
     console.log('%cGEM Enterprise Security Notice', 'color: #dc3545; font-size: 20px; font-weight: bold;');
     console.log('%cThis is a secure application. Unauthorized access attempts are monitored and logged.', 'color: #6c757d; font-size: 14px;');
     console.log('%cIf you are a legitimate user experiencing issues, please contact support.', 'color: #28a745; font-size: 14px;');
+    
+    // Performance monitoring
+    console.log('Page load time: ' + (performance.now() - performance.timing.navigationStart) + 'ms');
 });
 
 // Export functions for potential external use
