@@ -1136,6 +1136,82 @@ h1, h2, h3, h4, h5, h6 {
     flex-wrap: wrap;
 }
 
+/* Leadership Profile Cards */
+.leadership-profile-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.leadership-profile-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.profile-title {
+    margin-top: 1rem;
+}
+
+.profile-content {
+    text-align: left;
+}
+
+.profile-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-darker);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.profile-section h6 {
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.contact-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-info li {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.contact-info li:last-child {
+    margin-bottom: 0;
+}
+
+.media-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.leadership-title-section {
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-darker));
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
 @media (max-width: 768px) {
     .testimonial-footer {
         flex-direction: column;
@@ -1145,6 +1221,14 @@ h1, h2, h3, h4, h5, h6 {
     .cta-buttons {
         flex-direction: column;
         align-items: center;
+    }
+    
+    .media-links {
+        justify-content: center;
+    }
+    
+    .leadership-profile-card {
+        margin-bottom: 2rem;
     }
 }
 

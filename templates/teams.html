@@ -1,14 +1,64 @@
 {% extends "base.html" %}
 
-{% block title %}Our Teams - Gem Assist Enterprise{% endblock %}
+{% block title %}Leadership & Teams - Gem Assist Enterprise{% endblock %}
 
 {% block content %}
 <section class="page-header">
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1><i class="fas fa-user-friends me-3"></i>Our Expert Teams</h1>
-                <p class="lead">Meet the professionals behind GEM Enterprise</p>
+                <h1><i class="fas fa-crown me-3 text-warning"></i>Leadership & Teams</h1>
+                <p class="lead">Meet our executive leadership and specialized teams driving innovation in cybersecurity and real estate services</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Leadership Title Section -->
+<section class="py-4 bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="section-title mb-4">
+                    <i class="fas fa-users-crown me-2 text-warning"></i>
+                    Executive Leadership
+                </h2>
+                <p class="lead text-muted mb-0">
+                    Our seasoned leadership team combines decades of experience in cybersecurity, real estate, and financial services.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Live Notion Dashboard Integration -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="notion-dashboard-section">
+                    <h3 class="text-center mb-4">
+                        <i class="fas fa-database me-2"></i>
+                        Live Team Dashboard
+                    </h3>
+                    <p class="text-center text-muted mb-4">
+                        Real-time team information with photos and profiles synchronized from our internal GEM dashboard
+                    </p>
+                    <div class="notion-embed-container">
+                        <iframe 
+                            src="https://www.notion.so/embed/{{ database_id if database_id else 'your-database-id' }}"
+                            width="100%" 
+                            height="600"
+                            style="border: none; border-radius: 8px;">
+                        </iframe>
+                    </div>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-sync-alt me-1"></i>
+                            Data updates automatically from Notion GEM dashboard with images and contact information
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -161,11 +211,16 @@
             </div>
         </div>
         
-        <!-- Team Members from Notion Database -->
-        {% if cybersecurity_team or real_estate_team %}
+        <!-- Leadership Profiles Section -->
         <div class="row mt-5">
             <div class="col-12">
-                <h2 class="text-center mb-5">Meet Our Team Members</h2>
+                <h2 class="text-center mb-5">
+                    <i class="fas fa-id-card me-2"></i>
+                    Leadership Profiles with Contact & Media
+                </h2>
+                <p class="text-center text-muted mb-4">
+                    Detailed profiles, professional contact information, and media presence of our executive team
+                </p>
             </div>
         </div>
         
@@ -179,42 +234,80 @@
             
             <!-- John Doe - Cybersecurity Director -->
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="team-member-card">
-                    <div class="team-member-avatar bg-primary d-flex align-items-center justify-content-center">
-                        <i class="fas fa-shield-alt fa-2x text-white"></i>
+                <div class="leadership-profile-card">
+                    <div class="profile-header">
+                        <div class="team-member-avatar bg-primary d-flex align-items-center justify-content-center">
+                            <i class="fas fa-shield-alt fa-2x text-white"></i>
+                        </div>
+                        <div class="profile-title">
+                            <h5 class="team-member-name">John Doe</h5>
+                            <p class="team-member-position">Cybersecurity Director</p>
+                            <span class="team-member-department bg-primary">Executive Leadership</span>
+                        </div>
                     </div>
-                    <h5 class="team-member-name">John Doe</h5>
-                    <p class="team-member-position">Cybersecurity Director</p>
-                    <span class="team-member-department">Cybersecurity</span>
-                    <p class="team-member-bio">Oversees threat intelligence operations and system security audits across financial and real estate channels.</p>
-                    <div class="contact-links">
-                        <a href="mailto:johndoe@gemcybersecurityassist.com" class="btn btn-sm btn-outline-primary me-2">
-                            <i class="fas fa-envelope me-1"></i>Email
-                        </a>
-                        <a href="https://t.me/johndoe" class="btn btn-sm btn-outline-info">
-                            <i class="fab fa-telegram me-1"></i>Telegram
-                        </a>
+                    <div class="profile-content">
+                        <p class="team-member-bio">Oversees threat intelligence operations and system security audits across financial and real estate channels. 15+ years experience in cybersecurity.</p>
+                        
+                        <div class="profile-section">
+                            <h6><i class="fas fa-phone me-2"></i>Contact Information</h6>
+                            <ul class="contact-info">
+                                <li><i class="fas fa-envelope me-2"></i>johndoe@gemcybersecurityassist.com</li>
+                                <li><i class="fas fa-phone me-2"></i>+1 (860) 305-4376 ext. 101</li>
+                                <li><i class="fab fa-telegram me-2"></i>@johndoe_gem</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h6><i class="fas fa-share-alt me-2"></i>Media & Social</h6>
+                            <div class="media-links">
+                                <a href="#" class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fab fa-linkedin me-1"></i>LinkedIn
+                                </a>
+                                <a href="https://t.me/johndoe_gem" class="btn btn-sm btn-outline-info">
+                                    <i class="fab fa-telegram me-1"></i>Telegram
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <!-- Victor Chinemelomu - Chief Compliance & Intelligence Officer -->
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="team-member-card">
-                    <div class="team-member-avatar bg-warning d-flex align-items-center justify-content-center">
-                        <i class="fas fa-user-shield fa-2x text-white"></i>
+                <div class="leadership-profile-card">
+                    <div class="profile-header">
+                        <div class="team-member-avatar bg-warning d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user-shield fa-2x text-white"></i>
+                        </div>
+                        <div class="profile-title">
+                            <h5 class="team-member-name">Victor Chinemelomu</h5>
+                            <p class="team-member-position">Chief Compliance & Intelligence Officer</p>
+                            <span class="team-member-department bg-warning">Executive Leadership</span>
+                        </div>
                     </div>
-                    <h5 class="team-member-name">Victor Chinemelomu</h5>
-                    <p class="team-member-position">Chief Compliance & Intelligence Officer</p>
-                    <span class="team-member-department bg-warning">Cybersecurity</span>
-                    <p class="team-member-bio">Directs client regulatory intake, fraud detection systems, and ensures alignment with KYC/AML frameworks globally.</p>
-                    <div class="contact-links">
-                        <a href="mailto:chinemelomu@gemcybersecurityassist.com" class="btn btn-sm btn-outline-primary me-2">
-                            <i class="fas fa-envelope me-1"></i>Email
-                        </a>
-                        <a href="https://t.me/gemintell" class="btn btn-sm btn-outline-info">
-                            <i class="fab fa-telegram me-1"></i>Telegram
-                        </a>
+                    <div class="profile-content">
+                        <p class="team-member-bio">Directs client regulatory intake, fraud detection systems, and ensures alignment with KYC/AML frameworks globally. Expert in international compliance.</p>
+                        
+                        <div class="profile-section">
+                            <h6><i class="fas fa-phone me-2"></i>Contact Information</h6>
+                            <ul class="contact-info">
+                                <li><i class="fas fa-envelope me-2"></i>chinemelomu@gemcybersecurityassist.com</li>
+                                <li><i class="fas fa-phone me-2"></i>+1 (860) 305-4376 ext. 102</li>
+                                <li><i class="fab fa-telegram me-2"></i>@gemintell</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="profile-section">
+                            <h6><i class="fas fa-share-alt me-2"></i>Media & Social</h6>
+                            <div class="media-links">
+                                <a href="#" class="btn btn-sm btn-outline-primary me-2">
+                                    <i class="fab fa-linkedin me-1"></i>LinkedIn
+                                </a>
+                                <a href="https://t.me/gemintell" class="btn btn-sm btn-outline-info">
+                                    <i class="fab fa-telegram me-1"></i>Telegram
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
