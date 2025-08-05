@@ -137,9 +137,9 @@ def monitoring():
     """Threat monitoring services"""
     return render_template('monitoring.html')
 
-@app.route('/real-estate-testimonials')
+@app.route('/testimonials')
 def testimonials():
-    """Client testimonials for real estate services"""
+    """Client stories and testimonials for all services"""
     return render_template('testimonials.html')
 
 @app.route('/partners-and-trustees')
