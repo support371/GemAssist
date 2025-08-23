@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializePerformanceMonitoring() {
         // Monitor page load time
         window.addEventListener('load', function() {
-            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+            const loadTime = performance.now();
             console.log(`Page load time: ${loadTime}ms`);
             
             // Report slow loading
