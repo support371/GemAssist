@@ -1,103 +1,293 @@
 {% extends "base.html" %}
 
-{% block title %}Telegram Bot Automation - Gem Assist Enterprise{% endblock %}
+{% block title %}Telegram Bot Automation Services - GEM Enterprise{% endblock %}
 
 {% block content %}
-<section class="page-header">
+<div class="page-header">
     <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1><i class="fab fa-telegram me-3"></i>Telegram Bot Automation</h1>
-                <p class="lead">Advanced automation and secure communication solutions</p>
+        <h1><i class="fas fa-robot me-3"></i>Telegram Bot Automation Services</h1>
+        <p class="lead">Advanced automated bot services for cybersecurity, finance monitoring, and asset recovery through intelligent Telegram bots.</p>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <!-- Hero Stats -->
+    <div class="row mb-5">
+        <div class="col-md-4">
+            <div class="content-card text-center">
+                <h3 class="text-primary">24/7</h3>
+                <p>Bot Monitoring</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="content-card text-center">
+                <h3 class="text-primary">500K+</h3>
+                <p>Automated Tasks</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="content-card text-center">
+                <h3 class="text-primary">15</h3>
+                <p>Active Bot Services</p>
             </div>
         </div>
     </div>
-</section>
 
-<section class="py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <div class="content-card">
-                    <h2>Telegram Automation Services</h2>
-                    <p class="lead">Leverage the power of Telegram bots for secure communication, automated workflows, and enhanced business operations.</p>
-                    
-                    <div class="row mt-5">
-                        <div class="col-md-6">
-                            <div class="feature-box">
-                                <i class="fas fa-robot text-primary fa-2x mb-3"></i>
-                                <h4>Custom Bot Development</h4>
-                                <p>Tailored Telegram bots designed to meet your specific business requirements and security needs.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="feature-box">
-                                <i class="fas fa-bell text-info fa-2x mb-3"></i>
-                                <h4>Automated Notifications</h4>
-                                <p>Real-time alerts and notifications for security events, system status, and business updates.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="feature-box">
-                                <i class="fas fa-cogs text-success fa-2x mb-3"></i>
-                                <h4>Workflow Integration</h4>
-                                <p>Seamless integration with existing systems and automated workflow management.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="feature-box">
-                                <i class="fas fa-lock text-warning fa-2x mb-3"></i>
-                                <h4>Secure Messaging</h4>
-                                <p>End-to-end encrypted communication channels for sensitive business communications.</p>
-                            </div>
-                        </div>
+    <!-- Bot Services Grid -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Automated Bot Services</h2>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="service-card">
+                <div class="service-icon text-center mb-3">
+                    <i class="fas fa-shield-alt text-primary" style="font-size: 3rem;"></i>
+                </div>
+                <h4>CyberSecurity Bot</h4>
+                <p>Automated threat detection, real-time security alerts, and vulnerability scanning through Telegram commands.</p>
+                <div class="mb-3">
+                    <span class="badge bg-success me-2">Threat Alerts</span>
+                    <span class="badge bg-success me-2">Auto Scan</span>
+                    <span class="badge bg-success">24/7 Monitor</span>
+                </div>
+                <button class="btn btn-primary" onclick="joinTelegramBot('cybersecurity')">
+                    <i class="fas fa-robot me-2"></i>Start CyberSecurity Bot
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="service-card">
+                <div class="service-icon text-center mb-3">
+                    <i class="fas fa-coins text-warning" style="font-size: 3rem;"></i>
+                </div>
+                <h4>Asset Recovery Bot</h4>
+                <p>Automated asset tracking, recovery assistance, and cryptocurrency monitoring with instant notifications.</p>
+                <div class="mb-3">
+                    <span class="badge bg-info me-2">Auto Track</span>
+                    <span class="badge bg-info me-2">Recovery Aid</span>
+                    <span class="badge bg-info">Crypto Monitor</span>
+                </div>
+                <button class="btn btn-primary" onclick="joinTelegramBot('asset')">
+                    <i class="fas fa-robot me-2"></i>Start Asset Bot
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="service-card">
+                <div class="service-icon text-center mb-3">
+                    <i class="fas fa-chart-line text-success" style="font-size: 3rem;"></i>
+                </div>
+                <h4>Finance Monitor Bot</h4>
+                <p>Automated portfolio tracking, market alerts, and financial analysis delivered through Telegram.</p>
+                <div class="mb-3">
+                    <span class="badge bg-warning me-2">Portfolio Track</span>
+                    <span class="badge bg-warning me-2">Market Alerts</span>
+                    <span class="badge bg-warning">Auto Analysis</span>
+                </div>
+                <button class="btn btn-primary" onclick="joinTelegramBot('finance')">
+                    <i class="fas fa-robot me-2"></i>Start Finance Bot
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="service-card">
+                <div class="service-icon text-center mb-3">
+                    <i class="fas fa-home text-info" style="font-size: 3rem;"></i>
+                </div>
+                <h4>Real Estate Bot</h4>
+                <p>Automated property monitoring, market analysis, and investment opportunity alerts.</p>
+                <div class="mb-3">
+                    <span class="badge bg-primary me-2">Property Alerts</span>
+                    <span class="badge bg-primary me-2">Market Data</span>
+                    <span class="badge bg-primary">Investment Tips</span>
+                </div>
+                <button class="btn btn-primary" onclick="joinTelegramBot('realestate')">
+                    <i class="fas fa-robot me-2"></i>Start Real Estate Bot
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="service-card">
+                <div class="service-icon text-center mb-3">
+                    <i class="fas fa-bullseye text-danger" style="font-size: 3rem;"></i>
+                </div>
+                <h4>Trading Signals Bot</h4>
+                <p>Automated trading signals, market analysis, and risk management alerts for crypto and forex.</p>
+                <div class="mb-3">
+                    <span class="badge bg-danger me-2">Trade Signals</span>
+                    <span class="badge bg-danger me-2">Risk Alerts</span>
+                    <span class="badge bg-danger">Auto Analysis</span>
+                </div>
+                <button class="btn btn-primary" onclick="joinTelegramBot('trading')">
+                    <i class="fas fa-robot me-2"></i>Start Trading Bot
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="service-card">
+                <div class="service-icon text-center mb-3">
+                    <i class="fas fa-wallet text-purple" style="font-size: 3rem;"></i>
+                </div>
+                <h4>Wallet Security Bot</h4>
+                <p>Automated wallet monitoring, suspicious activity alerts, and security recommendations.</p>
+                <div class="mb-3">
+                    <span class="badge bg-secondary me-2">Wallet Monitor</span>
+                    <span class="badge bg-secondary me-2">Security Scan</span>
+                    <span class="badge bg-secondary">Breach Alerts</span>
+                </div>
+                <button class="btn btn-primary" onclick="joinTelegramBot('wallet')">
+                    <i class="fas fa-robot me-2"></i>Start Wallet Bot
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bot Commands -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Quick Bot Commands</h2>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="content-card text-center">
+                <code class="text-primary">/security_scan</code>
+                <p class="mt-2">Run automated security scan</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="content-card text-center">
+                <code class="text-primary">/asset_check</code>
+                <p class="mt-2">Check asset status and recovery</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="content-card text-center">
+                <code class="text-primary">/market_alert</code>
+                <p class="mt-2">Get market alerts and signals</p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="content-card text-center">
+                <code class="text-primary">/wallet_monitor</code>
+                <p class="mt-2">Monitor wallet activity</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Plans -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Bot Service Plans</h2>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="content-card text-center">
+                <h3>Basic Bot</h3>
+                <div class="display-4 text-primary mb-3">$29<small class="text-muted">/month</small></div>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>3 Bot Services</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Basic Automation</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Daily Reports</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Email Support</li>
+                </ul>
+                <button class="btn btn-outline-primary btn-lg" onclick="requestBotAccess('basic')">
+                    Start Basic Plan
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="content-card text-center border border-primary position-relative">
+                <span class="badge bg-primary position-absolute top-0 start-50 translate-middle">Most Popular</span>
+                <h3>Pro Bot</h3>
+                <div class="display-4 text-primary mb-3">$79<small class="text-muted">/month</small></div>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>All Bot Services</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Advanced Automation</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Real-time Alerts</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Custom Commands</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Priority Support</li>
+                </ul>
+                <button class="btn btn-primary btn-lg" onclick="requestBotAccess('pro')">
+                    Start Pro Plan
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="content-card text-center">
+                <h3>Enterprise Bot</h3>
+                <div class="display-4 text-primary mb-3">$199<small class="text-muted">/month</small></div>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Unlimited Bots</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Custom Integration</li>
+                    <li><i class="fas fa-check text-success me-2"></i>White-label Option</li>
+                    <li><i class="fas fa-check text-success me-2"></i>API Access</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Dedicated Support</li>
+                </ul>
+                <button class="btn btn-outline-primary btn-lg" onclick="requestBotAccess('enterprise')">
+                    Contact Sales
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Setup Instructions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="content-card">
+                <h2><i class="fas fa-cog me-3"></i>Bot Setup Instructions</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Getting Started</h4>
+                        <ol>
+                            <li>Choose your preferred bot service from above</li>
+                            <li>Click the "Start Bot" button for that service</li>
+                            <li>You'll be redirected to Telegram to begin setup</li>
+                            <li>Follow the bot's instructions to configure your preferences</li>
+                            <li>Start receiving automated alerts and monitoring</li>
+                        </ol>
                     </div>
-                    
-                    <h3 class="mt-5">Bot Capabilities</h3>
-                    <div class="capabilities-list">
-                        <div class="capability-item">
-                            <i class="fas fa-check-circle text-success me-3"></i>
-                            <div>
-                                <h5>Security Monitoring Bot</h5>
-                                <p>Real-time security alerts, threat notifications, and incident reporting through Telegram.</p>
-                            </div>
+                    <div class="col-md-6">
+                        <h4>Contact Information</h4>
+                        <div class="alert alert-info">
+                            <p><strong><i class="fab fa-telegram me-2"></i>Main Bot:</strong> @CyberWealthBot</p>
+                            <p><strong><i class="fas fa-phone me-2"></i>Support:</strong> Available 24/7</p>
+                            <p><strong><i class="fas fa-shield-alt me-2"></i>Security:</strong> Enterprise-grade encryption</p>
                         </div>
-                        <div class="capability-item">
-                            <i class="fas fa-check-circle text-success me-3"></i>
-                            <div>
-                                <h5>Real Estate Assistant Bot</h5>
-                                <p>Property updates, investment alerts, and market analysis delivered directly to your Telegram.</p>
-                            </div>
+                        <div class="text-center">
+                            <button class="btn btn-success btn-lg" onclick="startMainBot()">
+                                <i class="fab fa-telegram me-2"></i>Start Main Telegram Bot
+                            </button>
                         </div>
-                        <div class="capability-item">
-                            <i class="fas fa-check-circle text-success me-3"></i>
-                            <div>
-                                <h5>Client Communication Bot</h5>
-                                <p>Automated client support, appointment scheduling, and service updates.</p>
-                            </div>
-                        </div>
-                        <div class="capability-item">
-                            <i class="fas fa-check-circle text-success me-3"></i>
-                            <div>
-                                <h5>API Integration Bot</h5>
-                                <p>Connect external services and APIs for comprehensive data management and automation.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="cta-section mt-5 text-center">
-                        <h4>Ready to Automate Your Business?</h4>
-                        <p>Contact us to discuss your Telegram automation needs and get a custom solution.</p>
-                        <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg me-3">
-                            <i class="fas fa-envelope me-2"></i>Get Started
-                        </a>
-                        <a href="{{ url_for('services') }}" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-cogs me-2"></i>All Services
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
+
+<script>
+function joinTelegramBot(botType) {
+    const botUrls = {
+        'cybersecurity': 'https://t.me/CyberSecurityBot',
+        'asset': 'https://t.me/AssetRecoveryBot',
+        'finance': 'https://t.me/FinanceMonitorBot',
+        'realestate': 'https://t.me/RealEstateBot',
+        'trading': 'https://t.me/TradingSignalsBot',
+        'wallet': 'https://t.me/WalletSecurityBot'
+    };
+    
+    const botUrl = botUrls[botType] || 'https://t.me/CyberWealthBot';
+    window.open(botUrl, '_blank');
+    showAlert('info', `Redirecting to ${botType} bot setup...`);
+}
+
+function startMainBot() {
+    window.open('https://t.me/CyberWealthBot', '_blank');
+    showAlert('success', 'Opening main CyberWealth bot on Telegram...');
+}
+
+function requestBotAccess(plan) {
+    showAlert('info', `Requesting access for ${plan} plan. Please contact our team for setup.`);
+    // You can add form submission logic here
+}
+</script>
+
 {% endblock %}
