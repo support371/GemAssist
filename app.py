@@ -125,7 +125,7 @@ def contact():
 @app.route('/telegram-bot-automation')
 def telegram_bot():
     """Telegram bot automation services"""
-    return render_template('telegram-bot.html')
+    return render_template('telegram_bot.html')
 
 @app.route('/recovery-service-handbook')
 def recovery_service():
@@ -141,6 +141,16 @@ def business_analysis():
 def leadership_vision():
     """Leadership Team, Vision & Mission"""
     return render_template('leadership-vision.html')
+
+@app.route('/leadership')
+def leadership():
+    """Company Leadership and Board Members"""
+    return render_template('leadership.html')
+
+@app.route('/market-insights')
+def market_insights():
+    """Active Market Insights and Trends"""
+    return render_template('market_insights.html')
 
 @app.route('/power_of_attorney')
 def power_of_attorney():
