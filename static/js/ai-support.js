@@ -86,8 +86,8 @@ class GEMAISupport {
                     <span class="status-indicator online"></span>
                 </div>
                 <div class="trigger-text">
-                    <div class="trigger-title">AI Support</div>
-                    <div class="trigger-status">ARIA is online</div>
+                    <div class="trigger-title">GEM AI Assistant</div>
+                    <div class="trigger-status">ARIA • Enterprise Support</div>
                 </div>
             </div>
             
@@ -99,8 +99,8 @@ class GEMAISupport {
                             <span class="status-dot"></span>
                         </div>
                         <div class="header-text">
-                            <div class="agent-name">ARIA - AI Assistant</div>
-                            <div class="agent-status" id="agentStatus">Online & Ready to Help</div>
+                            <div class="agent-name">ARIA • GEM Enterprise</div>
+                            <div class="agent-status" id="agentStatus">Enterprise AI Support</div>
                         </div>
                     </div>
                     <div class="header-actions">
