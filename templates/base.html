@@ -85,6 +85,10 @@
                             <li><a class="dropdown-item" href="{{ url_for('investment_portfolio') }}">
                                 <i class="fas fa-chart-line me-2"></i>Investment Portfolio
                             </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('market_insights') }}">
+                                <i class="fas fa-chart-bar me-2"></i>Market Insights
+                            </a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -100,6 +104,9 @@
                             </a></li>
                             <li><a class="dropdown-item" href="{{ url_for('teams') }}">
                                 <i class="fas fa-user-friends me-2"></i>Our Teams
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('leadership') }}">
+                                <i class="fas fa-user-tie me-2"></i>Leadership & Board
                             </a></li>
                             <li><a class="dropdown-item" href="{{ url_for('news') }}">
                                 <i class="fas fa-newspaper me-2"></i>News & Newsletter
@@ -166,6 +173,7 @@
                     <ul class="list-unstyled">
                         <li><a href="{{ url_for('about') }}" class="text-muted">About Us</a></li>
                         <li><a href="{{ url_for('teams') }}" class="text-muted">Our Team</a></li>
+                        <li><a href="{{ url_for('leadership') }}" class="text-muted">Leadership</a></li>
                         <li><a href="{{ url_for('partners') }}" class="text-muted">Partners</a></li>
                         <li><a href="{{ url_for('news') }}" class="text-muted">News</a></li>
                     </ul>
