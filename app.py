@@ -132,6 +132,11 @@ def recovery_service():
     """Professional Asset Recovery Service Handbook"""
     return render_template('recovery-handbook.html')
 
+@app.route('/business-analysis-service')
+def business_analysis():
+    """Comprehensive Business Analysis & Integration Service"""
+    return render_template('business-analysis.html')
+
 @app.route('/power_of_attorney')
 def power_of_attorney():
     """Power of Attorney services"""
