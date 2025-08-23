@@ -255,11 +255,23 @@ document.addEventListener('DOMContentLoaded', function() {
             info: 'fa-info-circle'
         };
         
-        alertDiv.innerHTML = `
-            <i class="fas ${iconMap[type]} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
+        // Create icon element
+        const icon = document.createElement('i');
+        icon.className = `fas ${iconMap[type]} me-2`;
+        
+        // Create message text node (safe from XSS)
+        const messageText = document.createTextNode(message);
+        
+        // Create close button
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'btn-close';
+        closeButton.setAttribute('data-bs-dismiss', 'alert');
+        
+        // Append elements safely
+        alertDiv.appendChild(icon);
+        alertDiv.appendChild(messageText);
+        alertDiv.appendChild(closeButton);
         
         document.body.appendChild(alertDiv);
         
@@ -493,7 +505,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('%cIf you are a legitimate user experiencing issues, please contact support.', 'color: #28a745; font-size: 14px;');
     
     // Performance monitoring
-    console.log('Page load time: ' + (performance.now() - performance.timing.navigationStart) + 'ms');
+    const loadTime = performance.now();
+    console.log('Page load time: ' + loadTime + 'ms');
 });
 
 // Export functions for potential external use
