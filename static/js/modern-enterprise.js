@@ -512,3 +512,395 @@ const rippleCSS = `
 const style = document.createElement('style');
 style.textContent = rippleCSS;
 document.head.appendChild(style);
+
+// Multimedia Gallery Enhancements for Enterprise Services
+class MultimediaGalleryManager {
+    constructor() {
+        this.initializeMediaGalleries();
+    }
+
+    initializeMediaGalleries() {
+        this.setupMediaTabs();
+        this.setupVideoPlayers();
+        this.setupInteractiveShowcases();
+        this.setupMediaActions();
+        this.injectMultimediaStyles();
+    }
+
+    setupMediaTabs() {
+        const mediaTabs = document.querySelectorAll('.media-tab');
+        
+        mediaTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const tabName = e.target.dataset.tab;
+                const parentGallery = e.target.closest('.service-media-gallery');
+                
+                if (parentGallery) {
+                    parentGallery.querySelectorAll('.media-tab').forEach(t => t.classList.remove('active'));
+                    parentGallery.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    e.target.classList.add('active');
+                    const targetContent = parentGallery.querySelector(`[data-content="${tabName}"]`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                }
+            });
+        });
+    }
+
+    setupVideoPlayers() {
+        const videoPlaceholders = document.querySelectorAll('.video-placeholder, .preview-btn');
+        
+        videoPlaceholders.forEach(placeholder => {
+            placeholder.addEventListener('click', (e) => {
+                const videoId = e.target.closest('[data-video]')?.dataset.video || 
+                              e.target.closest('[data-media]')?.dataset.media || 
+                              'demo-video';
+                this.openVideoModal(videoId);
+            });
+        });
+    }
+
+    openVideoModal(videoId) {
+        const modal = document.createElement('div');
+        modal.className = 'multimedia-modal';
+        modal.innerHTML = `
+            <div class="modal-backdrop" onclick="this.closest('.multimedia-modal').remove()"></div>
+            <div class="modal-content-multimedia">
+                <div class="modal-header-multimedia">
+                    <h3>${this.getVideoTitle(videoId)}</h3>
+                    <button class="modal-close-multimedia" onclick="this.closest('.multimedia-modal').remove()">×</button>
+                </div>
+                <div class="modal-body-multimedia">
+                    <div class="video-container-multimedia">
+                        <div class="video-placeholder-large">
+                            <div class="video-overlay">
+                                <i class="fas fa-play-circle"></i>
+                                <span>Demo: ${this.getVideoTitle(videoId)}</span>
+                                <small>Professional service demonstration</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        requestAnimationFrame(() => {
+            modal.style.opacity = '1';
+            modal.querySelector('.modal-content-multimedia').style.transform = 'scale(1)';
+        });
+    }
+
+    getVideoTitle(videoId) {
+        const videoTitles = {
+            'cybersecurity-demo': 'Advanced Threat Detection',
+            'telegram-demo': 'Telegram Bot Automation',
+            'property-tour': 'Property Management Tour',
+            'forensics-process': 'Asset Recovery Process',
+            'legal-video': 'Legal Documentation Overview',
+            'portfolio-video': 'Investment Portfolio Analysis',
+            'partnership-video': 'Partnership Network'
+        };
+        return videoTitles[videoId] || 'Service Demonstration';
+    }
+
+    setupInteractiveShowcases() {
+        this.animateThreaTCharts();
+        this.animateBotMessages();
+        this.animateRecoveryFlow();
+        this.animateNetworkNodes();
+    }
+
+    animateThreaTCharts() {
+        const charts = document.querySelectorAll('.threat-chart');
+        
+        charts.forEach(chart => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const bars = entry.target.querySelectorAll('.chart-bar');
+                        bars.forEach((bar, index) => {
+                            setTimeout(() => {
+                                bar.style.transform = 'scaleY(1)';
+                                bar.style.opacity = '1';
+                            }, index * 200);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            chart.querySelectorAll('.chart-bar').forEach(bar => {
+                bar.style.transform = 'scaleY(0)';
+                bar.style.opacity = '0.3';
+                bar.style.transformOrigin = 'bottom';
+                bar.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            
+            observer.observe(chart);
+        });
+    }
+
+    animateBotMessages() {
+        const botConversations = document.querySelectorAll('.bot-conversation');
+        
+        botConversations.forEach(conversation => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const messages = entry.target.querySelectorAll('.bot-message');
+                        messages.forEach((message, index) => {
+                            setTimeout(() => {
+                                message.style.opacity = '1';
+                                message.style.transform = 'translateY(0)';
+                            }, index * 500 + 1000);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            conversation.querySelectorAll('.bot-message').forEach(message => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(20px)';
+                message.style.transition = 'all 0.4s ease-out';
+            });
+            
+            observer.observe(conversation);
+        });
+    }
+
+    animateRecoveryFlow() {
+        const recoveryFlows = document.querySelectorAll('.recovery-flow');
+        
+        recoveryFlows.forEach(flow => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const steps = entry.target.querySelectorAll('.flow-step');
+                        steps.forEach((step, index) => {
+                            setTimeout(() => {
+                                if (index === 0) step.classList.add('active');
+                                step.style.opacity = '1';
+                                step.style.transform = 'scale(1)';
+                                
+                                setTimeout(() => {
+                                    if (step.classList.contains('active')) {
+                                        step.classList.remove('active');
+                                        const nextStep = steps[index + 1];
+                                        if (nextStep) nextStep.classList.add('active');
+                                    }
+                                }, 2000);
+                            }, index * 800);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            flow.querySelectorAll('.flow-step').forEach(step => {
+                step.style.opacity = '0.6';
+                step.style.transform = 'scale(0.8)';
+                step.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            
+            observer.observe(flow);
+        });
+    }
+
+    animateNetworkNodes() {
+        const networks = document.querySelectorAll('.network-visualization');
+        
+        networks.forEach(network => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const nodes = entry.target.querySelectorAll('.network-node');
+                        nodes.forEach((node, index) => {
+                            setTimeout(() => {
+                                node.style.opacity = '1';
+                                node.style.transform = 'scale(1)';
+                            }, index * 300);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            network.querySelectorAll('.network-node').forEach(node => {
+                node.style.opacity = '0';
+                node.style.transform = 'scale(0)';
+                node.style.transition = 'all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            });
+            
+            observer.observe(network);
+        });
+    }
+
+    setupMediaActions() {
+        const mediaActionBtns = document.querySelectorAll('.media-action-btn, .preview-btn');
+        
+        mediaActionBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const action = e.target.closest('button').dataset.action;
+                const media = e.target.closest('button').dataset.media;
+                
+                if (action === 'video' || media) {
+                    this.openVideoModal(media || action);
+                } else if (action === 'gallery') {
+                    this.openImageGallery();
+                } else if (action === 'case-study') {
+                    this.openCaseStudy();
+                }
+                
+                this.addRippleEffect(e);
+            });
+        });
+    }
+
+    openImageGallery() {
+        const modal = document.createElement('div');
+        modal.className = 'multimedia-modal';
+        modal.innerHTML = `
+            <div class="modal-backdrop" onclick="this.closest('.multimedia-modal').remove()"></div>
+            <div class="gallery-content-multimedia">
+                <div class="modal-header-multimedia">
+                    <h3>Service Gallery</h3>
+                    <button class="modal-close-multimedia" onclick="this.closest('.multimedia-modal').remove()">×</button>
+                </div>
+                <div class="gallery-grid-multimedia">
+                    <div class="gallery-item-multimedia">
+                        <div class="image-placeholder-multimedia">
+                            <i class="fas fa-desktop"></i>
+                            <span>Dashboard Interface</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item-multimedia">
+                        <div class="image-placeholder-multimedia">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Security Analytics</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item-multimedia">
+                        <div class="image-placeholder-multimedia">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Performance Metrics</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        requestAnimationFrame(() => {
+            modal.style.opacity = '1';
+            modal.querySelector('.gallery-content-multimedia').style.transform = 'scale(1)';
+        });
+    }
+
+    openCaseStudy() {
+        const modal = document.createElement('div');
+        modal.className = 'multimedia-modal';
+        modal.innerHTML = `
+            <div class="modal-backdrop" onclick="this.closest('.multimedia-modal').remove()"></div>
+            <div class="case-study-content-multimedia">
+                <div class="modal-header-multimedia">
+                    <h3>Asset Recovery Case Study</h3>
+                    <button class="modal-close-multimedia" onclick="this.closest('.multimedia-modal').remove()">×</button>
+                </div>
+                <div class="case-study-body-multimedia">
+                    <div class="case-highlight-multimedia">
+                        <h4>$2.3M Recovery Success</h4>
+                        <p>Global Manufacturing Corp - Professional Asset Recovery</p>
+                    </div>
+                    <div class="case-details-multimedia">
+                        <div class="detail-section-multimedia">
+                            <h5>Challenge</h5>
+                            <p>Complex international asset recovery requiring forensic analysis and legal coordination.</p>
+                        </div>
+                        <div class="detail-section-multimedia">
+                            <h5>Solution</h5>
+                            <p>Advanced forensic techniques with comprehensive recovery strategy execution.</p>
+                        </div>
+                        <div class="detail-section-multimedia">
+                            <h5>Result</h5>
+                            <p>Successfully recovered $2.3M in assets within 90 days, exceeding expectations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        requestAnimationFrame(() => {
+            modal.style.opacity = '1';
+            modal.querySelector('.case-study-content-multimedia').style.transform = 'scale(1)';
+        });
+    }
+
+    addRippleEffect(event) {
+        const button = event.target.closest('button');
+        if (!button) return;
+        
+        const rect = button.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = event.clientX - rect.left - size / 2;
+        const y = event.clientY - rect.top - size / 2;
+        
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3);
+            width: ${size}px; height: ${size}px; left: ${x}px; top: ${y}px;
+            animation: ripple-multimedia 0.6s ease-out; pointer-events: none;
+        `;
+        
+        button.style.position = 'relative';
+        button.style.overflow = 'hidden';
+        button.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 600);
+    }
+
+    injectMultimediaStyles() {
+        const multimediaStyles = `
+            .multimedia-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+            .modal-backdrop { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; }
+            .modal-content-multimedia, .gallery-content-multimedia, .case-study-content-multimedia { position: relative; background: var(--bg-card); border-radius: 20px; max-width: 90vw; max-height: 90vh; overflow: auto; transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); border: 1px solid var(--border-color); }
+            .modal-header-multimedia { padding: 2rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+            .modal-header-multimedia h3 { margin: 0; color: var(--text-primary); font-size: 1.5rem; font-weight: 700; }
+            .modal-close-multimedia { background: none; border: none; font-size: 2rem; color: var(--text-muted); cursor: pointer; transition: color 0.3s ease; }
+            .modal-close-multimedia:hover { color: var(--text-primary); }
+            .modal-body-multimedia, .gallery-grid-multimedia, .case-study-body-multimedia { padding: 2rem; }
+            .video-container-multimedia { text-align: center; }
+            .video-placeholder-large { background: linear-gradient(135deg, rgba(17, 24, 39, 0.9) 0%, rgba(31, 41, 55, 0.7) 100%); border-radius: 12px; height: 400px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; border: 1px solid var(--border-color); }
+            .video-placeholder-large:hover { border-color: var(--primary-color); background: linear-gradient(135deg, rgba(6, 102, 204, 0.1) 0%, rgba(17, 24, 39, 0.9) 100%); }
+            .gallery-grid-multimedia { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+            .gallery-item-multimedia { border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s ease; }
+            .gallery-item-multimedia:hover { transform: translateY(-4px); border-color: var(--primary-color); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2); }
+            .image-placeholder-multimedia { height: 200px; background: linear-gradient(135deg, rgba(17, 24, 39, 0.8) 0%, rgba(31, 41, 55, 0.6) 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); gap: 1rem; }
+            .image-placeholder-multimedia i { font-size: 3rem; color: var(--primary-color); }
+            .case-highlight-multimedia { background: linear-gradient(135deg, rgba(6, 102, 204, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%); border: 1px solid rgba(6, 102, 204, 0.3); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: center; }
+            .case-highlight-multimedia h4 { color: var(--text-primary); font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+            .case-details-multimedia { display: grid; gap: 2rem; }
+            .detail-section-multimedia { background: rgba(17, 24, 39, 0.5); border-radius: 8px; padding: 1.5rem; border: 1px solid var(--border-color); }
+            .detail-section-multimedia h5 { color: var(--primary-color); font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; }
+            .detail-section-multimedia p { color: var(--text-secondary); line-height: 1.6; margin: 0; }
+            @keyframes ripple-multimedia { to { transform: scale(2); opacity: 0; } }
+            @media (max-width: 768px) { .modal-content-multimedia, .gallery-content-multimedia, .case-study-content-multimedia { max-width: 95vw; max-height: 95vh; } .modal-header-multimedia, .modal-body-multimedia, .gallery-grid-multimedia, .case-study-body-multimedia { padding: 1rem; } .video-placeholder-large { height: 250px; } .gallery-grid-multimedia { grid-template-columns: 1fr; } }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = multimediaStyles;
+        document.head.appendChild(styleSheet);
+    }
+}
+
+// Initialize multimedia gallery functionality
+document.addEventListener('DOMContentLoaded', () => {
+    new MultimediaGalleryManager();
+});
