@@ -137,9 +137,9 @@ def monitoring():
     """Threat monitoring services"""
     return render_template('monitoring.html')
 
-@app.route('/testimonials')
+@app.route('/real-estate-testimonials')
 def testimonials():
-    """Client stories and testimonials for all services"""
+    """Client testimonials for real estate services"""
     return render_template('testimonials.html')
 
 @app.route('/partners-and-trustees')
@@ -164,17 +164,13 @@ def news():
 
 @app.route('/teams')
 def teams():
-    """Leadership and team members structure"""
+    """Team members and structure"""
     team_data = get_notion_team_data()
     cybersecurity_team, real_estate_team = categorize_team_members(team_data)
     
-    # Get the Notion database ID for embedding
-    notion_database_id = os.environ.get("NOTION_DATABASE_ID", "")
-    
     return render_template('teams.html', 
                          cybersecurity_team=cybersecurity_team,
-                         real_estate_team=real_estate_team,
-                         database_id=notion_database_id)
+                         real_estate_team=real_estate_team)
 
 @app.route('/investment-portfolio')
 def investment_portfolio():
