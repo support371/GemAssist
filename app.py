@@ -127,6 +127,11 @@ def telegram_bot():
     """Telegram bot automation services"""
     return render_template('telegram-bot.html')
 
+@app.route('/recovery-service-handbook')
+def recovery_service():
+    """Professional Asset Recovery Service Handbook"""
+    return render_template('recovery-handbook.html')
+
 @app.route('/power_of_attorney')
 def power_of_attorney():
     """Power of Attorney services"""
