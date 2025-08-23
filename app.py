@@ -137,6 +137,11 @@ def business_analysis():
     """Comprehensive Business Analysis & Integration Service"""
     return render_template('business-analysis.html')
 
+@app.route('/leadership-vision')
+def leadership_vision():
+    """Leadership Team, Vision & Mission"""
+    return render_template('leadership-vision.html')
+
 @app.route('/power_of_attorney')
 def power_of_attorney():
     """Power of Attorney services"""
