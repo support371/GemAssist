@@ -1,15 +1,10 @@
 // Interactive Micro-Animations for GEM Enterprise
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize animations
-    initPageTransitions();
+    // Initialize only essential animations for performance
     initScrollAnimations();
     initHoverEffects();
-    initParallaxEffects();
     initCounterAnimations();
-    initRippleEffects();
-    initTextAnimations();
-    initLoadingAnimations();
     
     // Add page load animation class
     document.body.classList.add('animate-on-load');
@@ -29,7 +24,7 @@ function initPageTransitions() {
             const href = this.getAttribute('href');
             
             // Skip if it's a hash link on the same page
-            if (href.startsWith('#')) {
+            if (href && href.startsWith('#') && href.length > 1) {
                 smoothScrollToElement(href);
                 e.preventDefault();
                 return;
@@ -296,12 +291,21 @@ function initLoadingAnimations() {
 
 // Smooth Scroll to Element
 function smoothScrollToElement(selector) {
-    const element = document.querySelector(selector);
-    if (element) {
-        element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+    // Fix for invalid selector error
+    if (!selector || selector === '#' || selector.length < 2) {
+        return;
+    }
+    
+    try {
+        const element = document.querySelector(selector);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    } catch (error) {
+        console.warn('Invalid selector:', selector);
     }
 }
 
