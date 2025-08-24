@@ -9,6 +9,9 @@
             <div class="col-12 text-center">
                 <h1><i class="fas fa-star me-3"></i>Client Testimonials</h1>
                 <p class="lead">What our clients say about our services</p>
+                <a href="{{ url_for('submit_testimonial') }}" class="btn btn-primary btn-lg mt-3">
+                    <i class="fas fa-plus-circle me-2"></i>Share Your Experience
+                </a>
             </div>
         </div>
     </div>
@@ -16,189 +19,310 @@
 
 <section class="py-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-10 mx-auto">
-                <div class="testimonials-grid">
-                    <div class="testimonial-card">
+        {% if featured_testimonials %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">
+                    <i class="fas fa-trophy text-warning me-2"></i>Featured Testimonials
+                </h2>
+                <div class="testimonials-grid featured">
+                    {% for testimonial in featured_testimonials %}
+                    <div class="testimonial-card featured-card">
+                        <div class="featured-badge">
+                            <i class="fas fa-star"></i> Featured
+                        </div>
                         <div class="testimonial-header">
-                            <div class="stars">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
+                            <div class="client-info">
+                                {% if testimonial.image_url %}
+                                <img src="{{ testimonial.image_url }}" alt="{{ testimonial.client_name }}" class="client-photo">
+                                {% else %}
+                                <div class="client-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                {% endif %}
+                                <div class="testimonial-meta">
+                                    <h5>{{ testimonial.client_name }}</h5>
+                                    {% if testimonial.company_name %}
+                                    <p class="text-muted mb-1">{{ testimonial.company_position or 'Client' }}</p>
+                                    <p class="text-info small">{{ testimonial.company_name }}</p>
+                                    {% else %}
+                                    <p class="text-muted">{{ testimonial.company_position or 'Valued Client' }}</p>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="testimonial-meta">
-                                <h5>Sarah Johnson</h5>
-                                <p class="text-muted">Real Estate Investor</p>
+                            <div class="stars">
+                                {% for i in range(testimonial.rating|int) %}
+                                <i class="fas fa-star text-warning"></i>
+                                {% endfor %}
+                                {% for i in range(5 - testimonial.rating|int) %}
+                                <i class="far fa-star text-warning"></i>
+                                {% endfor %}
                             </div>
                         </div>
+                        {% if testimonial.title %}
+                        <h6 class="testimonial-title">"{{ testimonial.title }}"</h6>
+                        {% endif %}
                         <blockquote>
-                            "GEM Enterprise's comprehensive security and real estate services have been invaluable to my investment portfolio. Their threat monitoring caught several attempted breaches, and their real estate expertise helped me identify profitable opportunities."
+                            {{ testimonial.testimonial_text }}
                         </blockquote>
+                        {% if testimonial.video_url %}
+                        <div class="testimonial-video mb-3">
+                            <video controls class="w-100" style="max-height: 300px;">
+                                <source src="{{ testimonial.video_url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        {% endif %}
                         <div class="testimonial-footer">
                             <i class="fas fa-shield-check text-success me-2"></i>
-                            <small>Verified Client - Security & Real Estate Services</small>
+                            <small>Verified Client - {{ testimonial.service_type.value|replace('_', ' ')|title }}</small>
                         </div>
+                        {% if testimonial.company_logo_url %}
+                        <div class="company-logo mt-3">
+                            <img src="{{ testimonial.company_logo_url }}" alt="{{ testimonial.company_name }} Logo">
+                        </div>
+                        {% endif %}
                     </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="stars">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                            </div>
-                            <div class="testimonial-meta">
-                                <h5>Michael Chen</h5>
-                                <p class="text-muted">Technology Executive</p>
-                            </div>
-                        </div>
-                        <blockquote>
-                            "The Telegram automation services transformed our business operations. Their custom bots handle client communications seamlessly while maintaining the highest security standards. Absolutely recommended!"
-                        </blockquote>
-                        <div class="testimonial-footer">
-                            <i class="fas fa-robot text-info me-2"></i>
-                            <small>Verified Client - Telegram Automation Services</small>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="stars">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                            </div>
-                            <div class="testimonial-meta">
-                                <h5>Emma Rodriguez</h5>
-                                <p class="text-muted">Business Owner</p>
-                            </div>
-                        </div>
-                        <blockquote>
-                            "When we needed power of attorney services for our business expansion, GEM Enterprise handled everything professionally. Their legal team ensured all documentation was perfect and compliant."
-                        </blockquote>
-                        <div class="testimonial-footer">
-                            <i class="fas fa-gavel text-warning me-2"></i>
-                            <small>Verified Client - Legal & Trust Services</small>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="stars">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                            </div>
-                            <div class="testimonial-meta">
-                                <h5>David Thompson</h5>
-                                <p class="text-muted">Financial Advisor</p>
-                            </div>
-                        </div>
-                        <blockquote>
-                            "Their 24/7 threat monitoring service gave us peace of mind. When a security incident occurred, they responded within minutes and resolved it before any damage was done. Outstanding service!"
-                        </blockquote>
-                        <div class="testimonial-footer">
-                            <i class="fas fa-eye text-primary me-2"></i>
-                            <small>Verified Client - Threat Monitoring Services</small>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="stars">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                            </div>
-                            <div class="testimonial-meta">
-                                <h5>Lisa Park</h5>
-                                <p class="text-muted">Investment Manager</p>
-                            </div>
-                        </div>
-                        <blockquote>
-                            "The investment portfolio management and partnership services exceeded our expectations. Their strategic approach helped us diversify successfully while maintaining security as a top priority."
-                        </blockquote>
-                        <div class="testimonial-footer">
-                            <i class="fas fa-chart-line text-success me-2"></i>
-                            <small>Verified Client - Investment & Partnership Services</small>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="stars">
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                            </div>
-                            <div class="testimonial-meta">
-                                <h5>Robert Wilson</h5>
-                                <p class="text-muted">Property Developer</p>
-                            </div>
-                        </div>
-                        <blockquote>
-                            "Alliance Trust Realty's expertise in real estate combined with GEM's security services created the perfect partnership for our development projects. Professional, reliable, and trustworthy."
-                        </blockquote>
-                        <div class="testimonial-footer">
-                            <i class="fas fa-home text-info me-2"></i>
-                            <small>Verified Client - Real Estate & Security Services</small>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-                
-                <div class="trust-statistics mt-5">
-                    <div class="row text-center">
-                        <div class="col-md-3">
-                            <div class="stat-card">
-                                <h3 class="text-primary">500+</h3>
-                                <p>Satisfied Clients</p>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                {% if regular_testimonials %}
+                <h2 class="text-center mb-4">Client Reviews</h2>
+                <div class="testimonials-grid">
+                    {% for testimonial in regular_testimonials %}
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="client-info">
+                                {% if testimonial.image_url %}
+                                <img src="{{ testimonial.image_url }}" alt="{{ testimonial.client_name }}" class="client-photo">
+                                {% else %}
+                                <div class="client-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                {% endif %}
+                                <div class="testimonial-meta">
+                                    <h5>{{ testimonial.client_name }}</h5>
+                                    {% if testimonial.company_name %}
+                                    <p class="text-muted mb-0">{{ testimonial.company_position or 'Client' }}</p>
+                                    <p class="text-info small">{{ testimonial.company_name }}</p>
+                                    {% else %}
+                                    <p class="text-muted">{{ testimonial.company_position or 'Valued Client' }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="stars">
+                                {% for i in range(testimonial.rating|int) %}
+                                <i class="fas fa-star text-warning"></i>
+                                {% endfor %}
+                                {% for i in range(5 - testimonial.rating|int) %}
+                                <i class="far fa-star text-warning"></i>
+                                {% endfor %}
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="stat-card">
-                                <h3 class="text-success">99.9%</h3>
-                                <p>Client Satisfaction</p>
-                            </div>
+                        {% if testimonial.title %}
+                        <h6 class="testimonial-title">"{{ testimonial.title }}"</h6>
+                        {% endif %}
+                        <blockquote>
+                            {{ testimonial.testimonial_text }}
+                        </blockquote>
+                        {% if testimonial.video_url %}
+                        <div class="testimonial-video mb-3">
+                            <video controls class="w-100" style="max-height: 250px;">
+                                <source src="{{ testimonial.video_url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                         </div>
-                        <div class="col-md-3">
-                            <div class="stat-card">
-                                <h3 class="text-warning">24/7</h3>
-                                <p>Support Available</p>
-                            </div>
+                        {% endif %}
+                        <div class="testimonial-footer">
+                            <i class="fas fa-shield-check text-success me-2"></i>
+                            <small>Verified Client - {{ testimonial.service_type.value|replace('_', ' ')|title }}</small>
                         </div>
-                        <div class="col-md-3">
-                            <div class="stat-card">
-                                <h3 class="text-info">5 Years</h3>
-                                <p>Average Partnership</p>
-                            </div>
+                        {% if testimonial.company_logo_url %}
+                        <div class="company-logo mt-3">
+                            <img src="{{ testimonial.company_logo_url }}" alt="{{ testimonial.company_name }} Logo">
                         </div>
+                        {% endif %}
                     </div>
+                    {% endfor %}
                 </div>
-                
-                <div class="cta-section mt-5 text-center">
-                    <h3>Join Our Satisfied Clients</h3>
-                    <p class="lead">Experience the same level of professional service and security that our clients trust.</p>
-                    <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg me-3">
-                        <i class="fas fa-handshake me-2"></i>Become a Client
-                    </a>
-                    <a href="{{ url_for('services') }}" class="btn btn-outline-primary btn-lg">
-                        <i class="fas fa-list me-2"></i>Our Services
+                {% else %}
+                {% if not featured_testimonials %}
+                <div class="text-center py-5">
+                    <i class="fas fa-comments fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted">Be the First to Share Your Experience!</h3>
+                    <p class="lead">We're collecting testimonials from our valued clients.</p>
+                    <a href="{{ url_for('submit_testimonial') }}" class="btn btn-primary btn-lg mt-3">
+                        <i class="fas fa-plus-circle me-2"></i>Submit Your Testimonial
                     </a>
                 </div>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>
 </section>
+
+<style>
+.page-header {
+    background: linear-gradient(135deg, rgba(34, 193, 195, 0.1) 0%, rgba(253, 187, 45, 0.1) 100%);
+    padding: 5rem 0 3rem;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.testimonials-grid.featured {
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+}
+
+.testimonial-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+}
+
+.featured-card {
+    background: linear-gradient(135deg, var(--bg-card) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border: 2px solid var(--primary-color);
+}
+
+.featured-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    color: #000;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.testimonial-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.client-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.client-photo, .client-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.client-photo {
+    object-fit: cover;
+}
+
+.client-avatar {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.testimonial-meta h5 {
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.testimonial-meta p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+}
+
+.testimonial-title {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.stars {
+    display: flex;
+    gap: 0.25rem;
+}
+
+blockquote {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 3px solid var(--primary-color);
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.testimonial-video {
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+}
+
+.testimonial-footer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+}
+
+.company-logo {
+    text-align: center;
+    padding-top: 1rem;
+}
+
+.company-logo img {
+    max-height: 40px;
+    max-width: 120px;
+    opacity: 0.8;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+.testimonial-card:hover .company-logo img {
+    opacity: 1;
+    filter: grayscale(0%);
+}
+
+@media (max-width: 768px) {
+    .testimonials-grid,
+    .testimonials-grid.featured {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonial-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+</style>
 {% endblock %}
