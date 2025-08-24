@@ -1,25 +1,35 @@
 import os
 import logging
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 
-# Try to import Notion client, handle if not available
+# Try to import the original notion client for existing functionality
 try:
-    from notion_client import Client
-    NOTION_AVAILABLE = True
+    from notion_client import Client as NotionClient
+    NOTION_LIBRARY_AVAILABLE = True
 except ImportError:
-    NOTION_AVAILABLE = False
-    logging.warning("Notion client not available")
+    NOTION_LIBRARY_AVAILABLE = False
+    NotionClient = None
+    logging.warning("Notion library not available")
+
+# Try to import custom leadership client
+try:
+    from gem_notion_client import get_leadership_data_from_notion
+    LEADERSHIP_CLIENT_AVAILABLE = True
+except ImportError:
+    LEADERSHIP_CLIENT_AVAILABLE = False
+    get_leadership_data_from_notion = lambda: []
+    logging.warning("Custom leadership client not available")
 
 # Set up logging for debugging
 logging.basicConfig(level=logging.DEBUG)
 
 def get_notion_team_data():
     """Fetch team member data from Notion database"""
-    if not NOTION_AVAILABLE:
+    if not NOTION_LIBRARY_AVAILABLE or not NotionClient:
         return []
         
     try:
-        notion = Client(auth=os.environ.get('NOTION_INTEGRATION_SECRET'))
+        notion = NotionClient(auth=os.environ.get('NOTION_INTEGRATION_SECRET'))
         database_id = os.environ.get('NOTION_DATABASE_ID')
         
         if not notion or not database_id:
@@ -145,7 +155,14 @@ def leadership_vision():
 @app.route('/leadership')
 def leadership():
     """Company Leadership and Board Members"""
-    return render_template('leadership.html')
+    leadership_data = get_leadership_data_from_notion()
+    return render_template('leadership.html', leadership_data=leadership_data)
+
+@app.route('/api/leadership-data')
+def api_leadership_data():
+    """API endpoint for leadership data"""
+    leadership_data = get_leadership_data_from_notion()
+    return jsonify(leadership_data)
 
 @app.route('/market-insights')
 def market_insights():
