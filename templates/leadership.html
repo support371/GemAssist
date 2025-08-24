@@ -20,73 +20,97 @@
     <div class="container">
         <h2 class="section-title">Board of Directors</h2>
         
-        <!-- Important Notice for Adding Real Content -->
+        <!-- Notion Integration Notice -->
         <div class="content-notice">
-            <i class="fas fa-info-circle"></i>
-            <p>To add your board members, replace the placeholder content below with actual information:</p>
-            <ul>
-                <li>Add real photos in the img src attributes</li>
-                <li>Update names, titles, and biographies</li>
-                <li>Include actual LinkedIn profiles</li>
-            </ul>
+            <i class="fas fa-database"></i>
+            <p><strong>Leadership data will be loaded from your Notion database.</strong></p>
+            {% if not leadership_data %}
+            <div class="alert alert-warning">
+                <strong>Notion Setup Required:</strong> Your database needs to be shared with the integration.
+                <br>Go to your Notion database → "..." → Connections → Add your integration.
+            </div>
+            {% else %}
+            <div class="alert alert-success">
+                <strong>Connected!</strong> Displaying {{ leadership_data|length }} board members from Notion.
+            </div>
+            {% endif %}
         </div>
 
         <div class="leadership-grid">
-            <!-- Chairman/CEO -->
+            {% if leadership_data %}
+                {% for leader in leadership_data %}
+                <div class="leader-card {% if leader.featured %}featured{% endif %}">
+                    <div class="leader-image">
+                        {% if leader.photo_url %}
+                            <img src="{{ leader.photo_url }}" alt="{{ leader.name }}" class="responsive-image loaded">
+                        {% else %}
+                            <div class="image-placeholder" data-type="leader-photo">
+                                <i class="fas fa-user-tie"></i>
+                                <span>Add {{ leader.name }} Photo</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="leader-info">
+                        <h3 class="leader-name">{{ leader.name }}</h3>
+                        <p class="leader-title">{{ leader.position }}</p>
+                        {% if leader.bio %}
+                        <p class="leader-bio">{{ leader.bio }}</p>
+                        {% endif %}
+                        {% if leader.expertise %}
+                        <div class="leader-credentials">
+                            {% for skill in leader.expertise %}
+                            <span class="credential">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <div class="leader-social">
+                            {% if leader.linkedin %}
+                            <a href="{{ leader.linkedin }}" class="social-link" target="_blank">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            {% endif %}
+                            {% if leader.email %}
+                            <a href="mailto:{{ leader.email }}" class="social-link">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <!-- Fallback content when Notion data is not available -->
             <div class="leader-card featured">
                 <div class="leader-image">
-                    <!-- Add real photo here: <img src="/static/images/ceo-photo.jpg" alt="CEO Name"> -->
                     <div class="image-placeholder" data-type="ceo-photo">
                         <i class="fas fa-user-tie"></i>
-                        <span>Add CEO Photo</span>
+                        <span>CEO Photo</span>
                     </div>
                 </div>
                 <div class="leader-info">
-                    <h3 class="leader-name">[CEO Name]</h3>
-                    <p class="leader-title">Chairman & Chief Executive Officer</p>
+                    <h3 class="leader-name">Leadership Team</h3>
+                    <p class="leader-title">Your Board Members</p>
                     <p class="leader-bio">
-                        [Add CEO biography here - professional background, achievements, vision for the company]
+                        Connect your Notion database to display your leadership team automatically. Your database should include fields for Name, Position, Bio, Email, LinkedIn, and Photo.
                     </p>
                     <div class="leader-credentials">
-                        <span class="credential">[Education]</span>
-                        <span class="credential">[Years of Experience]</span>
-                        <span class="credential">[Key Achievement]</span>
+                        <span class="credential">Database: Connected</span>
+                        <span class="credential">Permissions: Setup Required</span>
                     </div>
                     <div class="leader-social">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="#" class="social-link">
-                            <i class="fas fa-envelope"></i>
+                        <a href="https://notion.so" class="social-link" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
                 </div>
             </div>
+            {% endif %}
 
-            <!-- CTO -->
-            <div class="leader-card">
-                <div class="leader-image">
-                    <!-- Add real photo here -->
-                    <div class="image-placeholder">
-                        <i class="fas fa-user-tie"></i>
-                        <span>Add CTO Photo</span>
-                    </div>
-                </div>
-                <div class="leader-info">
-                    <h3 class="leader-name">[CTO Name]</h3>
-                    <p class="leader-title">Chief Technology Officer</p>
-                    <p class="leader-bio">
-                        [Add CTO biography - technical expertise, innovation leadership]
-                    </p>
-                    <div class="leader-social">
-                        <a href="#" class="social-link">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+        </div>
+    </div>
+</section>
 
-            <!-- CFO -->
+<!-- Rest of page content -->
             <div class="leader-card">
                 <div class="leader-image">
                     <!-- Add real photo here -->
