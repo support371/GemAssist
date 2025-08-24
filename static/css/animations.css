@@ -107,13 +107,13 @@
     }
 }
 
-/* Page Load Animations */
+/* Page Load Animations - Optimized */
 .animate-on-load {
-    animation: pageEnter 0.6s ease-out;
+    animation: pageEnter 0.3s ease-out;
 }
 
 .main-content {
-    animation: fadeInUp 0.8s ease-out;
+    animation: fadeInUp 0.4s ease-out;
 }
 
 /* Navigation Animations */
