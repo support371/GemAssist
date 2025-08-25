@@ -133,7 +133,7 @@ ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Initialize database if available
 if USE_DATABASE:
-    from models import db, Testimonial, ContactSubmission, NewsletterSubscriber, ServiceType, TestimonialStatus, VIPBoardMember
+    from models import db, Testimonial, ContactSubmission, NewsletterSubscriber, ServiceType, TestimonialStatus, VIPBoardMember, BoardMember, Membership
     db.init_app(app)
     
     # Create tables
@@ -147,6 +147,8 @@ else:
     ServiceType = None
     TestimonialStatus = None
     VIPBoardMember = None
+    BoardMember = None
+    Membership = None
 
 def allowed_file(filename, file_type='any'):
     if file_type == 'video':
@@ -200,14 +202,222 @@ def leadership_vision():
 @app.route('/leadership')
 def leadership():
     """Company Leadership and Board Members"""
+    executives = {}
+    board_members = []
+    departments = {}
+    
+    if USE_DATABASE:
+        # Get VIP executives
+        executives = {
+            'CEO': VIPBoardMember.query.filter_by(position='CEO', is_active=True).first(),
+            'CFO': VIPBoardMember.query.filter_by(position='CFO', is_active=True).first(),
+            'COO': VIPBoardMember.query.filter_by(position='COO', is_active=True).first(),
+            'LEGAL': VIPBoardMember.query.filter_by(position='LEGAL', is_active=True).first()
+        }
+        
+        # Get all board members grouped by department
+        all_board_members = BoardMember.query.filter_by(is_active=True).order_by(BoardMember.order_index, BoardMember.name).all()
+        
+        for member in all_board_members:
+            dept = member.department or 'General'
+            if dept not in departments:
+                departments[dept] = []
+            departments[dept].append(member)
+    
+    # Try to get data from Notion as fallback
     leadership_data = get_leadership_data_from_notion()
-    return render_template('leadership.html', leadership_data=leadership_data)
+    
+    return render_template('leadership.html', 
+                         executives=executives,
+                         departments=departments,
+                         leadership_data=leadership_data)
 
 @app.route('/api/leadership-data')
 def api_leadership_data():
     """API endpoint for leadership data"""
     leadership_data = get_leadership_data_from_notion()
     return jsonify(leadership_data)
+
+@app.route('/membership')
+def membership():
+    """Membership portal and information"""
+    membership_tiers = {
+        'gold': {
+            'name': 'Gold Membership',
+            'price': '$500/month',
+            'benefits': [
+                'Priority access to all services',
+                'Dedicated account manager',
+                'Monthly security audits',
+                '24/7 emergency support',
+                'Custom automation solutions',
+                'VIP event invitations'
+            ]
+        },
+        'silver': {
+            'name': 'Silver Membership',
+            'price': '$250/month',
+            'benefits': [
+                'Access to core services',
+                'Quarterly security reviews',
+                'Business hours support',
+                'Standard automation tools',
+                'Member-only resources'
+            ]
+        },
+        'bronze': {
+            'name': 'Bronze Membership',
+            'price': '$100/month',
+            'benefits': [
+                'Basic service access',
+                'Annual security check',
+                'Email support',
+                'Community access'
+            ]
+        }
+    }
+    
+    members = []
+    if USE_DATABASE:
+        # Get active members for public display (limited info)
+        members = Membership.query.filter_by(status='active', is_verified=True).limit(20).all()
+    
+    return render_template('membership.html', membership_tiers=membership_tiers, members=members)
+
+@app.route('/apply-membership', methods=['GET', 'POST'])
+def apply_membership():
+    """Membership application form"""
+    if request.method == 'POST':
+        if not USE_DATABASE:
+            flash('Membership applications are temporarily unavailable.', 'error')
+            return redirect(url_for('membership'))
+        
+        try:
+            # Generate unique member ID
+            import random
+            import string
+            member_id = 'GEM' + ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+            
+            membership = Membership(
+                member_id=member_id,
+                full_name=request.form.get('full_name'),
+                email=request.form.get('email'),
+                phone=request.form.get('phone'),
+                company=request.form.get('company'),
+                position=request.form.get('position'),
+                membership_type=request.form.get('membership_type'),
+                referred_by=request.form.get('referred_by'),
+                status='pending'
+            )
+            
+            db.session.add(membership)
+            db.session.commit()
+            
+            flash(f'Thank you for applying! Your membership ID is {member_id}. We will contact you soon.', 'success')
+            return redirect(url_for('membership'))
+            
+        except Exception as e:
+            flash('Error processing your application. Please try again.', 'error')
+            return redirect(url_for('apply_membership'))
+    
+    return render_template('apply_membership.html')
+
+@app.route('/admin/board-members', methods=['GET', 'POST'])
+def admin_board_members():
+    """Admin interface for managing board members"""
+    if not USE_DATABASE:
+        flash('Database not available', 'error')
+        return redirect(url_for('admin_panel'))
+    
+    if request.method == 'POST':
+        action = request.form.get('action')
+        
+        if action == 'add':
+            member = BoardMember(
+                name=request.form.get('name'),
+                position=request.form.get('position'),
+                department=request.form.get('department'),
+                bio=request.form.get('bio'),
+                email=request.form.get('email'),
+                phone=request.form.get('phone'),
+                linkedin_url=request.form.get('linkedin_url'),
+                specialties=request.form.get('specialties'),
+                responsibilities=request.form.get('responsibilities'),
+                is_executive=request.form.get('is_executive') == 'true',
+                order_index=int(request.form.get('order_index', 0))
+            )
+            
+            # Handle photo upload
+            if 'photo' in request.files:
+                file = request.files['photo']
+                if file and file.filename and allowed_file(file.filename, 'image'):
+                    filename = secure_filename(f"board_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}")
+                    file_path = os.path.join('static/uploads/board', filename)
+                    os.makedirs(os.path.dirname(os.path.join(app.root_path, file_path)), exist_ok=True)
+                    full_path = os.path.join(app.root_path, file_path)
+                    file.save(full_path)
+                    member.photo_url = '/' + file_path
+            
+            db.session.add(member)
+            db.session.commit()
+            flash('Board member added successfully', 'success')
+        
+        elif action == 'update':
+            member_id = request.form.get('member_id')
+            member = BoardMember.query.get(member_id)
+            if member:
+                member.name = request.form.get('name')
+                member.position = request.form.get('position')
+                member.department = request.form.get('department')
+                member.bio = request.form.get('bio')
+                member.email = request.form.get('email')
+                member.phone = request.form.get('phone')
+                member.linkedin_url = request.form.get('linkedin_url')
+                member.specialties = request.form.get('specialties')
+                member.responsibilities = request.form.get('responsibilities')
+                member.is_executive = request.form.get('is_executive') == 'true'
+                member.order_index = int(request.form.get('order_index', 0))
+                
+                db.session.commit()
+                flash('Board member updated successfully', 'success')
+        
+        return redirect(url_for('admin_board_members'))
+    
+    board_members = BoardMember.query.order_by(BoardMember.department, BoardMember.order_index).all()
+    return render_template('admin_board_members.html', board_members=board_members)
+
+@app.route('/admin/memberships')
+def admin_memberships():
+    """Admin interface for managing memberships"""
+    if not USE_DATABASE:
+        flash('Database not available', 'error')
+        return redirect(url_for('admin_panel'))
+    
+    memberships = Membership.query.order_by(Membership.created_at.desc()).all()
+    return render_template('admin_memberships.html', memberships=memberships)
+
+@app.route('/admin/membership/<int:id>/approve', methods=['POST'])
+def approve_membership(id):
+    """Approve a membership application"""
+    if not USE_DATABASE:
+        return jsonify({'error': 'Database not configured'}), 500
+    
+    membership = Membership.query.get_or_404(id)
+    membership.status = 'active'
+    membership.is_verified = True
+    
+    # Set expiry date based on membership type
+    from datetime import timedelta
+    if membership.membership_type == 'gold':
+        membership.expiry_date = datetime.utcnow() + timedelta(days=365)
+    elif membership.membership_type == 'silver':
+        membership.expiry_date = datetime.utcnow() + timedelta(days=180)
+    else:
+        membership.expiry_date = datetime.utcnow() + timedelta(days=90)
+    
+    db.session.commit()
+    flash(f'Membership {membership.member_id} approved!', 'success')
+    return redirect(url_for('admin_memberships'))
 
 @app.route('/market-insights')
 def market_insights():
@@ -408,7 +618,7 @@ def admin_vip_board():
     """Admin interface for managing VIP board members"""
     if not USE_DATABASE:
         flash('Database not available', 'error')
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin_panel'))
     
     if request.method == 'POST':
         position = request.form.get('position')

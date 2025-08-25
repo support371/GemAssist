@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, Boolean, Enum
+from sqlalchemy import Column, Integer, String, Text, Float, DateTime, Boolean, Enum, Date
 import enum
 
 db = SQLAlchemy()
@@ -116,3 +116,47 @@ class VIPBoardMember(db.Model):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_active = Column(Boolean, default=True)
+
+class BoardMember(db.Model):
+    __tablename__ = 'board_members'
+    
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    position = Column(String(200), nullable=False)
+    department = Column(String(100))  # Executive, Advisory, Operations, etc.
+    bio = Column(Text)
+    photo_url = Column(String(500))
+    linkedin_url = Column(String(200))
+    email = Column(String(120))
+    phone = Column(String(20))
+    start_date = Column(Date)
+    specialties = Column(Text)
+    responsibilities = Column(Text)
+    order_index = Column(Integer, default=0)  # For custom ordering
+    is_executive = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class Membership(db.Model):
+    __tablename__ = 'memberships'
+    
+    id = Column(Integer, primary_key=True)
+    member_id = Column(String(50), unique=True, nullable=False)  # Unique membership ID
+    full_name = Column(String(100), nullable=False)
+    email = Column(String(120), unique=True, nullable=False)
+    phone = Column(String(20))
+    company = Column(String(200))
+    position = Column(String(100))
+    membership_type = Column(String(50))  # Gold, Silver, Bronze, Basic
+    status = Column(String(20), default='pending')  # pending, active, suspended, expired
+    join_date = Column(DateTime, default=datetime.utcnow)
+    expiry_date = Column(DateTime)
+    last_payment_date = Column(DateTime)
+    benefits = Column(Text)  # JSON string of benefits
+    notes = Column(Text)
+    referred_by = Column(String(100))
+    photo_url = Column(String(500))
+    is_verified = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

@@ -1,16 +1,148 @@
 {% extends 'base.html' %}
 
-{% block title %}Leadership Team - GEM Enterprise{% endblock %}
+{% block title %}Leadership & Board - Gem Assist Enterprise{% endblock %}
 
 {% block content %}
 <!-- Leadership Hero Section -->
 <section class="leadership-hero">
     <div class="container">
         <div class="hero-content">
-            <h1 class="hero-title">Our Leadership Team</h1>
+            <h1 class="hero-title">Leadership & Board</h1>
             <p class="hero-description">
-                Experienced executives and board members driving innovation and excellence in enterprise security and business services
+                Guiding GEM Enterprise with Vision, Integrity, and Excellence
             </p>
+            <div class="header-actions mt-4">
+                <a href="{{ url_for('vip_board') }}" class="btn btn-warning btn-lg me-3">
+                    <i class="fas fa-crown me-2"></i>Executive Board
+                </a>
+                <a href="{{ url_for('membership') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-users me-2"></i>Membership Portal
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Executive Leadership Section -->
+<section class="executive-leadership py-5 bg-darker">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="display-5 fw-bold">Executive Leadership</h2>
+            <p class="lead text-muted">Our C-Suite executives driving strategic initiatives</p>
+        </div>
+        
+        <div class="row g-4">
+            {% if executives.CEO %}
+            <div class="col-lg-3 col-md-6">
+                <div class="executive-card-compact">
+                    <div class="executive-image-compact">
+                        {% if executives.CEO.headshot_url %}
+                        <img src="{{ executives.CEO.headshot_url }}" alt="{{ executives.CEO.name }}">
+                        {% else %}
+                        <div class="executive-placeholder">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="executive-info-compact">
+                        <h4>{{ executives.CEO.name }}</h4>
+                        <p class="text-warning fw-bold">Chief Executive Officer</p>
+                        <div class="executive-links">
+                            {% if executives.CEO.email %}
+                            <a href="mailto:{{ executives.CEO.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
+                            {% endif %}
+                            {% if executives.CEO.linkedin_url %}
+                            <a href="{{ executives.CEO.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if executives.CFO %}
+            <div class="col-lg-3 col-md-6">
+                <div class="executive-card-compact">
+                    <div class="executive-image-compact">
+                        {% if executives.CFO.headshot_url %}
+                        <img src="{{ executives.CFO.headshot_url }}" alt="{{ executives.CFO.name }}">
+                        {% else %}
+                        <div class="executive-placeholder">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="executive-info-compact">
+                        <h4>{{ executives.CFO.name }}</h4>
+                        <p class="text-primary fw-bold">Chief Financial Officer</p>
+                        <div class="executive-links">
+                            {% if executives.CFO.email %}
+                            <a href="mailto:{{ executives.CFO.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
+                            {% endif %}
+                            {% if executives.CFO.linkedin_url %}
+                            <a href="{{ executives.CFO.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if executives.COO %}
+            <div class="col-lg-3 col-md-6">
+                <div class="executive-card-compact">
+                    <div class="executive-image-compact">
+                        {% if executives.COO.headshot_url %}
+                        <img src="{{ executives.COO.headshot_url }}" alt="{{ executives.COO.name }}">
+                        {% else %}
+                        <div class="executive-placeholder">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="executive-info-compact">
+                        <h4>{{ executives.COO.name }}</h4>
+                        <p class="text-success fw-bold">Chief Operations Officer</p>
+                        <div class="executive-links">
+                            {% if executives.COO.email %}
+                            <a href="mailto:{{ executives.COO.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
+                            {% endif %}
+                            {% if executives.COO.linkedin_url %}
+                            <a href="{{ executives.COO.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if executives.LEGAL %}
+            <div class="col-lg-3 col-md-6">
+                <div class="executive-card-compact">
+                    <div class="executive-image-compact">
+                        {% if executives.LEGAL.headshot_url %}
+                        <img src="{{ executives.LEGAL.headshot_url }}" alt="{{ executives.LEGAL.name }}">
+                        {% else %}
+                        <div class="executive-placeholder">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="executive-info-compact">
+                        <h4>{{ executives.LEGAL.name }}</h4>
+                        <p class="text-danger fw-bold">Chief Legal Officer</p>
+                        <div class="executive-links">
+                            {% if executives.LEGAL.email %}
+                            <a href="mailto:{{ executives.LEGAL.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
+                            {% endif %}
+                            {% if executives.LEGAL.linkedin_url %}
+                            <a href="{{ executives.LEGAL.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </section>
@@ -294,9 +426,22 @@
 <style>
 /* Leadership Page Styles */
 .leadership-hero {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
     padding: 120px 0 80px;
     color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.leadership-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path fill="%23ffd700" fill-opacity="0.05" d="M1200 120L0 16V0h1200v120z"/></svg>');
+    background-size: cover;
 }
 
 .hero-content {
@@ -546,6 +691,81 @@
     line-height: 1.6;
 }
 
+/* Executive Cards */
+.executive-card-compact {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.executive-card-compact:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.executive-image-compact {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(255, 215, 0, 0.3);
+}
+
+.executive-image-compact img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.executive-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2a2a4a, #1a1a3a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.executive-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.executive-links a {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.executive-links a:hover {
+    background: var(--primary-color);
+    transform: translateY(-3px);
+}
+
+.header-actions {
+    position: relative;
+    z-index: 1;
+    margin-top: 2rem;
+}
+
+.bg-darker {
+    background-color: var(--bg-darker);
+}
+
 @media (max-width: 768px) {
     .hero-title {
         font-size: 2rem;
@@ -558,6 +778,11 @@
     
     .leadership-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .executive-image-compact {
+        width: 120px;
+        height: 120px;
     }
 }
 </style>
