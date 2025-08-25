@@ -28,9 +28,13 @@
                     <div class="executive-content">
                         <div class="executive-image-wrapper">
                             <div class="executive-image">
+                                {% if executives.CEO and executives.CEO.headshot_url %}
+                                <img src="{{ executives.CEO.headshot_url }}" alt="{{ executives.CEO.name }}" class="executive-photo">
+                                {% else %}
                                 <div class="placeholder-executive">
                                     <i class="fas fa-user-tie"></i>
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="executive-status">
                                 <span class="status-indicator active"></span>
@@ -38,24 +42,42 @@
                             </div>
                         </div>
                         <div class="executive-info">
-                            <h2 class="executive-name">Executive CEO</h2>
-                            <p class="executive-title text-gold">Chief Executive Officer</p>
+                            <h2 class="executive-name">{{ executives.CEO.name if executives.CEO else 'Executive CEO' }}</h2>
+                            <p class="executive-title text-gold">{{ executives.CEO.title if executives.CEO else 'Chief Executive Officer' }}</p>
                             <div class="executive-bio">
-                                <p>Leading GEM Enterprise with over 20 years of experience in cybersecurity and strategic business development. Pioneering innovative security solutions and driving company growth through strategic partnerships and technological advancement.</p>
+                                <p>{{ executives.CEO.bio if executives.CEO else 'Leading GEM Enterprise with over 20 years of experience in cybersecurity and strategic business development. Pioneering innovative security solutions and driving company growth through strategic partnerships and technological advancement.' }}</p>
                                 <div class="executive-specialties">
+                                    {% if executives.CEO and executives.CEO.specialties %}
+                                        {% for specialty in executives.CEO.specialties.split(',') %}
+                                        <span class="specialty-tag">{{ specialty.strip() }}</span>
+                                        {% endfor %}
+                                    {% else %}
                                     <span class="specialty-tag">Strategic Leadership</span>
                                     <span class="specialty-tag">Cybersecurity</span>
                                     <span class="specialty-tag">Business Development</span>
                                     <span class="specialty-tag">Innovation</span>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="executive-contact">
+                                {% if executives.CEO and executives.CEO.email %}
+                                <a href="mailto:{{ executives.CEO.email }}" class="btn btn-gold btn-sm">
+                                    <i class="fas fa-envelope me-2"></i>Contact CEO
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-gold btn-sm">
                                     <i class="fas fa-envelope me-2"></i>Contact CEO
                                 </a>
+                                {% endif %}
+                                {% if executives.CEO and executives.CEO.linkedin_url %}
+                                <a href="{{ executives.CEO.linkedin_url }}" target="_blank" class="btn btn-outline-light btn-sm">
+                                    <i class="fab fa-linkedin me-2"></i>LinkedIn
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-outline-light btn-sm">
                                     <i class="fab fa-linkedin me-2"></i>LinkedIn
                                 </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -69,9 +91,13 @@
                     <div class="executive-content">
                         <div class="executive-image-wrapper">
                             <div class="executive-image">
+                                {% if executives.CFO and executives.CFO.headshot_url %}
+                                <img src="{{ executives.CFO.headshot_url }}" alt="{{ executives.CFO.name }}" class="executive-photo">
+                                {% else %}
                                 <div class="placeholder-executive">
                                     <i class="fas fa-user-tie"></i>
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="executive-status">
                                 <span class="status-indicator active"></span>
@@ -79,24 +105,42 @@
                             </div>
                         </div>
                         <div class="executive-info">
-                            <h2 class="executive-name">Executive CFO</h2>
-                            <p class="executive-title text-gold">Chief Financial Officer</p>
+                            <h2 class="executive-name">{{ executives.CFO.name if executives.CFO else 'Executive CFO' }}</h2>
+                            <p class="executive-title text-gold">{{ executives.CFO.title if executives.CFO else 'Chief Financial Officer' }}</p>
                             <div class="executive-bio">
-                                <p>Overseeing financial operations with expertise in investment portfolio management and strategic financial planning. Ensuring fiscal responsibility while driving profitable growth across all business divisions.</p>
+                                <p>{{ executives.CFO.bio if executives.CFO else 'Overseeing financial operations with expertise in investment portfolio management and strategic financial planning. Ensuring fiscal responsibility while driving profitable growth across all business divisions.' }}</p>
                                 <div class="executive-specialties">
+                                    {% if executives.CFO and executives.CFO.specialties %}
+                                        {% for specialty in executives.CFO.specialties.split(',') %}
+                                        <span class="specialty-tag">{{ specialty.strip() }}</span>
+                                        {% endfor %}
+                                    {% else %}
                                     <span class="specialty-tag">Financial Strategy</span>
                                     <span class="specialty-tag">Investment Management</span>
                                     <span class="specialty-tag">Risk Assessment</span>
                                     <span class="specialty-tag">M&A</span>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="executive-contact">
+                                {% if executives.CFO and executives.CFO.email %}
+                                <a href="mailto:{{ executives.CFO.email }}" class="btn btn-gold btn-sm">
+                                    <i class="fas fa-envelope me-2"></i>Contact CFO
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-gold btn-sm">
                                     <i class="fas fa-envelope me-2"></i>Contact CFO
                                 </a>
+                                {% endif %}
+                                {% if executives.CFO and executives.CFO.linkedin_url %}
+                                <a href="{{ executives.CFO.linkedin_url }}" target="_blank" class="btn btn-outline-light btn-sm">
+                                    <i class="fab fa-linkedin me-2"></i>LinkedIn
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-outline-light btn-sm">
                                     <i class="fab fa-linkedin me-2"></i>LinkedIn
                                 </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -110,9 +154,13 @@
                     <div class="executive-content">
                         <div class="executive-image-wrapper">
                             <div class="executive-image">
+                                {% if executives.COO and executives.COO.headshot_url %}
+                                <img src="{{ executives.COO.headshot_url }}" alt="{{ executives.COO.name }}" class="executive-photo">
+                                {% else %}
                                 <div class="placeholder-executive">
                                     <i class="fas fa-user-tie"></i>
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="executive-status">
                                 <span class="status-indicator active"></span>
@@ -120,24 +168,42 @@
                             </div>
                         </div>
                         <div class="executive-info">
-                            <h2 class="executive-name">Executive Manager</h2>
-                            <p class="executive-title text-gold">Chief Operations Officer</p>
+                            <h2 class="executive-name">{{ executives.COO.name if executives.COO else 'Executive Manager' }}</h2>
+                            <p class="executive-title text-gold">{{ executives.COO.title if executives.COO else 'Chief Operations Officer' }}</p>
                             <div class="executive-bio">
-                                <p>Managing day-to-day operations across all business units. Implementing operational excellence initiatives and ensuring seamless service delivery to our global client base.</p>
+                                <p>{{ executives.COO.bio if executives.COO else 'Managing day-to-day operations across all business units. Implementing operational excellence initiatives and ensuring seamless service delivery to our global client base.' }}</p>
                                 <div class="executive-specialties">
+                                    {% if executives.COO and executives.COO.specialties %}
+                                        {% for specialty in executives.COO.specialties.split(',') %}
+                                        <span class="specialty-tag">{{ specialty.strip() }}</span>
+                                        {% endfor %}
+                                    {% else %}
                                     <span class="specialty-tag">Operations Management</span>
                                     <span class="specialty-tag">Process Optimization</span>
                                     <span class="specialty-tag">Team Leadership</span>
                                     <span class="specialty-tag">Quality Assurance</span>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="executive-contact">
+                                {% if executives.COO and executives.COO.email %}
+                                <a href="mailto:{{ executives.COO.email }}" class="btn btn-gold btn-sm">
+                                    <i class="fas fa-envelope me-2"></i>Contact COO
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-gold btn-sm">
                                     <i class="fas fa-envelope me-2"></i>Contact COO
                                 </a>
+                                {% endif %}
+                                {% if executives.COO and executives.COO.linkedin_url %}
+                                <a href="{{ executives.COO.linkedin_url }}" target="_blank" class="btn btn-outline-light btn-sm">
+                                    <i class="fab fa-linkedin me-2"></i>LinkedIn
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-outline-light btn-sm">
                                     <i class="fab fa-linkedin me-2"></i>LinkedIn
                                 </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -151,9 +217,13 @@
                     <div class="executive-content">
                         <div class="executive-image-wrapper">
                             <div class="executive-image">
+                                {% if executives.LEGAL and executives.LEGAL.headshot_url %}
+                                <img src="{{ executives.LEGAL.headshot_url }}" alt="{{ executives.LEGAL.name }}" class="executive-photo">
+                                {% else %}
                                 <div class="placeholder-executive">
                                     <i class="fas fa-user-tie"></i>
                                 </div>
+                                {% endif %}
                             </div>
                             <div class="executive-status">
                                 <span class="status-indicator active"></span>
@@ -161,24 +231,42 @@
                             </div>
                         </div>
                         <div class="executive-info">
-                            <h2 class="executive-name">Executive Legal Counsel</h2>
-                            <p class="executive-title text-gold">Chief Legal & Compliance Officer</p>
+                            <h2 class="executive-name">{{ executives.LEGAL.name if executives.LEGAL else 'Executive Legal Counsel' }}</h2>
+                            <p class="executive-title text-gold">{{ executives.LEGAL.title if executives.LEGAL else 'Chief Legal & Compliance Officer' }}</p>
                             <div class="executive-bio">
-                                <p>Ensuring regulatory compliance and managing legal affairs across all jurisdictions. Specializing in cybersecurity law, real estate regulations, and international business compliance.</p>
+                                <p>{{ executives.LEGAL.bio if executives.LEGAL else 'Ensuring regulatory compliance and managing legal affairs across all jurisdictions. Specializing in cybersecurity law, real estate regulations, and international business compliance.' }}</p>
                                 <div class="executive-specialties">
+                                    {% if executives.LEGAL and executives.LEGAL.specialties %}
+                                        {% for specialty in executives.LEGAL.specialties.split(',') %}
+                                        <span class="specialty-tag">{{ specialty.strip() }}</span>
+                                        {% endfor %}
+                                    {% else %}
                                     <span class="specialty-tag">Legal Compliance</span>
                                     <span class="specialty-tag">Regulatory Affairs</span>
                                     <span class="specialty-tag">Contract Law</span>
                                     <span class="specialty-tag">Risk Management</span>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="executive-contact">
+                                {% if executives.LEGAL and executives.LEGAL.email %}
+                                <a href="mailto:{{ executives.LEGAL.email }}" class="btn btn-gold btn-sm">
+                                    <i class="fas fa-envelope me-2"></i>Contact Legal
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-gold btn-sm">
                                     <i class="fas fa-envelope me-2"></i>Contact Legal
                                 </a>
+                                {% endif %}
+                                {% if executives.LEGAL and executives.LEGAL.linkedin_url %}
+                                <a href="{{ executives.LEGAL.linkedin_url }}" target="_blank" class="btn btn-outline-light btn-sm">
+                                    <i class="fab fa-linkedin me-2"></i>LinkedIn
+                                </a>
+                                {% else %}
                                 <a href="#" class="btn btn-outline-light btn-sm">
                                     <i class="fab fa-linkedin me-2"></i>LinkedIn
                                 </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -314,6 +402,12 @@
     overflow: hidden;
     border: 3px solid rgba(255, 215, 0, 0.3);
     position: relative;
+}
+
+.executive-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .placeholder-executive {

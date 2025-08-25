@@ -133,7 +133,7 @@ ALLOWED_IMAGE_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 # Initialize database if available
 if USE_DATABASE:
-    from models import db, Testimonial, ContactSubmission, NewsletterSubscriber, ServiceType, TestimonialStatus
+    from models import db, Testimonial, ContactSubmission, NewsletterSubscriber, ServiceType, TestimonialStatus, VIPBoardMember
     db.init_app(app)
     
     # Create tables
@@ -146,6 +146,7 @@ else:
     NewsletterSubscriber = None
     ServiceType = None
     TestimonialStatus = None
+    VIPBoardMember = None
 
 def allowed_file(filename, file_type='any'):
     if file_type == 'video':
@@ -276,7 +277,22 @@ def investment_portfolio():
 @app.route('/vip-board-members')
 def vip_board():
     """VIP Board Members - Executive Leadership"""
-    return render_template('vip_board.html')
+    executives = {}
+    if USE_DATABASE:
+        # Get all VIP board members from database
+        ceo = VIPBoardMember.query.filter_by(position='CEO', is_active=True).first()
+        cfo = VIPBoardMember.query.filter_by(position='CFO', is_active=True).first()
+        coo = VIPBoardMember.query.filter_by(position='COO', is_active=True).first()
+        legal = VIPBoardMember.query.filter_by(position='LEGAL', is_active=True).first()
+        
+        executives = {
+            'CEO': ceo,
+            'CFO': cfo,
+            'COO': coo,
+            'LEGAL': legal
+        }
+    
+    return render_template('vip_board.html', executives=executives)
 
 @app.route('/submit-testimonial', methods=['GET', 'POST'])
 def submit_testimonial():
@@ -386,6 +402,76 @@ def reject_testimonial(id):
     db.session.commit()
     flash('Testimonial rejected.', 'info')
     return redirect(url_for('admin_testimonials'))
+
+@app.route('/admin/vip-board', methods=['GET', 'POST'])
+def admin_vip_board():
+    """Admin interface for managing VIP board members"""
+    if not USE_DATABASE:
+        flash('Database not available', 'error')
+        return redirect(url_for('admin'))
+    
+    if request.method == 'POST':
+        position = request.form.get('position')
+        name = request.form.get('name')
+        title = request.form.get('title')
+        bio = request.form.get('bio')
+        linkedin_url = request.form.get('linkedin_url')
+        email = request.form.get('email')
+        years_experience = request.form.get('years_experience')
+        specialties = request.form.get('specialties')
+        achievements = request.form.get('achievements')
+        
+        # Check if member exists for this position
+        member = VIPBoardMember.query.filter_by(position=position).first()
+        
+        if not member:
+            member = VIPBoardMember(position=position)
+            db.session.add(member)
+        
+        # Update member details
+        member.name = name
+        member.title = title
+        member.bio = bio
+        member.linkedin_url = linkedin_url
+        member.email = email
+        member.years_experience = int(years_experience) if years_experience else None
+        member.specialties = specialties
+        member.achievements = achievements
+        member.is_active = True
+        
+        # Handle headshot upload
+        if 'headshot' in request.files:
+            file = request.files['headshot']
+            if file and file.filename and allowed_file(file.filename, 'image'):
+                # Delete old headshot if exists
+                if member.headshot_url:
+                    try:
+                        old_path = os.path.join(app.root_path, member.headshot_url[1:])
+                        if os.path.exists(old_path):
+                            os.remove(old_path)
+                    except:
+                        pass
+                
+                # Save new headshot
+                filename = secure_filename(f"{position.lower()}_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{file.filename}")
+                file_path = os.path.join('static/uploads/headshots', filename)
+                full_path = os.path.join(app.root_path, file_path)
+                file.save(full_path)
+                member.headshot_url = '/' + file_path
+        
+        db.session.commit()
+        flash(f'{position} profile updated successfully', 'success')
+        return redirect(url_for('admin_vip_board'))
+    
+    # Get all board members
+    executives = {
+        'CEO': VIPBoardMember.query.filter_by(position='CEO').first(),
+        'CFO': VIPBoardMember.query.filter_by(position='CFO').first(),
+        'COO': VIPBoardMember.query.filter_by(position='COO').first(),
+        'LEGAL': VIPBoardMember.query.filter_by(position='LEGAL').first()
+    }
+    
+    return render_template('admin_vip_board.html', executives=executives)
 
 @app.route('/admin/testimonial/<int:id>/feature', methods=['POST'])
 def feature_testimonial(id):
