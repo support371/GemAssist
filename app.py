@@ -273,6 +273,11 @@ def investment_portfolio():
     """Investment portfolio services"""
     return render_template('portfolio.html')
 
+@app.route('/vip-board-members')
+def vip_board():
+    """VIP Board Members - Executive Leadership"""
+    return render_template('vip_board.html')
+
 @app.route('/submit-testimonial', methods=['GET', 'POST'])
 def submit_testimonial():
     """Handle testimonial submission"""
