@@ -98,3 +98,21 @@ class NewsletterSubscriber(db.Model):
     subscribed_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
     unsubscribed_at = Column(DateTime)
+
+class VIPBoardMember(db.Model):
+    __tablename__ = 'vip_board_members'
+    
+    id = Column(Integer, primary_key=True)
+    position = Column(String(50), unique=True, nullable=False)  # CEO, CFO, COO, LEGAL
+    name = Column(String(100), nullable=False)
+    title = Column(String(200))
+    bio = Column(Text)
+    headshot_url = Column(String(500))  # Path to uploaded headshot
+    linkedin_url = Column(String(200))
+    email = Column(String(120))
+    years_experience = Column(Integer)
+    specialties = Column(Text)  # Comma-separated specialties
+    achievements = Column(Text)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    is_active = Column(Boolean, default=True)
