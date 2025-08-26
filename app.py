@@ -225,7 +225,7 @@ def contact():
 @app.route('/telegram-bot-automation')
 def telegram_bot():
     """Telegram bot automation services"""
-    return render_template('telegram_bot.html')
+    return render_template('telegram.html')
 
 @app.route('/recovery-service-handbook')
 def recovery_service():
