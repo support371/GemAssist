@@ -340,7 +340,7 @@ def admin_board_members():
                 bio=request.form.get('bio'),
                 email=request.form.get('email'),
                 phone=request.form.get('phone'),
-                linkedin_url=request.form.get('linkedin_url'),
+                alignable_url=request.form.get('alignable_url'),
                 specialties=request.form.get('specialties'),
                 responsibilities=request.form.get('responsibilities'),
                 is_executive=request.form.get('is_executive') == 'true',
@@ -372,7 +372,7 @@ def admin_board_members():
                 member.bio = request.form.get('bio')
                 member.email = request.form.get('email')
                 member.phone = request.form.get('phone')
-                member.linkedin_url = request.form.get('linkedin_url')
+                member.alignable_url = request.form.get('alignable_url')
                 member.specialties = request.form.get('specialties')
                 member.responsibilities = request.form.get('responsibilities')
                 member.is_executive = request.form.get('is_executive') == 'true'
@@ -625,7 +625,7 @@ def admin_vip_board():
         name = request.form.get('name')
         title = request.form.get('title')
         bio = request.form.get('bio')
-        linkedin_url = request.form.get('linkedin_url')
+        alignable_url = request.form.get('alignable_url')
         email = request.form.get('email')
         years_experience = request.form.get('years_experience')
         specialties = request.form.get('specialties')
@@ -642,7 +642,7 @@ def admin_vip_board():
         member.name = name
         member.title = title
         member.bio = bio
-        member.linkedin_url = linkedin_url
+        member.alignable_url = alignable_url
         member.email = email
         member.years_experience = int(years_experience) if years_experience else None
         member.specialties = specialties

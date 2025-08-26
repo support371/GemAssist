@@ -51,8 +51,8 @@
                             {% if executives.CEO.email %}
                             <a href="mailto:{{ executives.CEO.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
                             {% endif %}
-                            {% if executives.CEO.linkedin_url %}
-                            <a href="{{ executives.CEO.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% if executives.CEO.alignable_url %}
+                            <a href="{{ executives.CEO.alignable_url }}" target="_blank"><i class="fas fa-link"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -79,8 +79,8 @@
                             {% if executives.CFO.email %}
                             <a href="mailto:{{ executives.CFO.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
                             {% endif %}
-                            {% if executives.CFO.linkedin_url %}
-                            <a href="{{ executives.CFO.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% if executives.CFO.alignable_url %}
+                            <a href="{{ executives.CFO.alignable_url }}" target="_blank"><i class="fas fa-link"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -107,8 +107,8 @@
                             {% if executives.COO.email %}
                             <a href="mailto:{{ executives.COO.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
                             {% endif %}
-                            {% if executives.COO.linkedin_url %}
-                            <a href="{{ executives.COO.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% if executives.COO.alignable_url %}
+                            <a href="{{ executives.COO.alignable_url }}" target="_blank"><i class="fas fa-link"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -135,8 +135,8 @@
                             {% if executives.LEGAL.email %}
                             <a href="mailto:{{ executives.LEGAL.email }}" class="me-2"><i class="fas fa-envelope"></i></a>
                             {% endif %}
-                            {% if executives.LEGAL.linkedin_url %}
-                            <a href="{{ executives.LEGAL.linkedin_url }}" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            {% if executives.LEGAL.alignable_url %}
+                            <a href="{{ executives.LEGAL.alignable_url }}" target="_blank"><i class="fas fa-link"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -196,9 +196,9 @@
                         </div>
                         {% endif %}
                         <div class="leader-social">
-                            {% if leader.linkedin %}
-                            <a href="{{ leader.linkedin }}" class="social-link" target="_blank">
-                                <i class="fab fa-linkedin"></i>
+                            {% if leader.alignable %}
+                            <a href="{{ leader.alignable }}" class="social-link" target="_blank">
+                                <i class="fas fa-link"></i>
                             </a>
                             {% endif %}
                             {% if leader.email %}
