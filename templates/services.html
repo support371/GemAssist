@@ -16,6 +16,42 @@
 
 <section class="py-5">
     <div class="container">
+        <!-- Notion Content Display -->
+        {% if notion_services %}
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-sync-alt me-2"></i>
+                    Content managed through Notion CMS - Last updated: {{ notion_services[0].last_edited_time if notion_services else 'Never' }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for service in notion_services %}
+            <div class="col-lg-6">
+                <div class="service-detail-card">
+                    <div class="service-header">
+                        <i class="fas fa-shield-alt fa-2x text-primary"></i>
+                        <h3>{{ service.title }}</h3>
+                    </div>
+                    <p>{{ service.content[:200] }}...</p>
+                    <div class="service-categories mb-3">
+                        {% if service.category %}
+                            {% for cat in service.category %}
+                            <span class="badge bg-secondary me-1">{{ cat }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% if service.url_slug %}
+                    <a href="/service/{{ service.url_slug }}" class="btn btn-primary">Learn More</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Default Services (Fallback when Notion not configured) -->
         <div class="row g-4">
             <!-- Cybersecurity Services -->
             <div class="col-lg-6">
@@ -140,6 +176,21 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </section>
+
+<style>
+.service-categories {
+    margin-top: 10px;
+}
+
+.service-detail-card {
+    transition: transform 0.3s ease;
+}
+
+.service-detail-card:hover {
+    transform: translateY(-5px);
+}
+</style>
 {% endblock %}
