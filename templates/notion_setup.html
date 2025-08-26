@@ -220,6 +220,26 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Cache Management -->
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <div class="card bg-dark border-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            <i class="fas fa-database me-2"></i>Cache Management
+                        </h4>
+                        <p>Manage the local content cache for better performance.</p>
+                        <button class="btn btn-warning" onclick="clearCache()">
+                            <i class="fas fa-trash me-2"></i>Clear Cache
+                        </button>
+                        <button class="btn btn-info ms-2" onclick="viewCache()">
+                            <i class="fas fa-eye me-2"></i>View Cached Content
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endif %}
 
         <!-- Back to Admin -->
@@ -239,7 +259,7 @@ function syncContent() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert(`Content synced successfully!\n\nServices: ${data.content_counts.services}\nNews: ${data.content_counts.news}\nTestimonials: ${data.content_counts.testimonials}\nFeatured: ${data.content_counts.featured}`);
+                alert(`Content synced successfully!\n\nServices: ${data.content_counts.services}\nNews: ${data.content_counts.news}\nTestimonials: ${data.content_counts.testimonials}\nFeatured: ${data.content_counts.featured}\n\nLast sync: ${data.last_sync}`);
                 location.reload();
             } else {
                 alert('Error syncing content: ' + (data.error || 'Unknown error'));
@@ -247,6 +267,36 @@ function syncContent() {
         })
         .catch(error => {
             alert('Error syncing content: ' + error);
+        });
+}
+
+function clearCache() {
+    if (confirm('Are you sure you want to clear the content cache?')) {
+        fetch('/api/notion/clear-cache', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Cache cleared successfully!');
+                    location.reload();
+                } else {
+                    alert('Failed to clear cache: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                alert('Error clearing cache: ' + error);
+            });
+    }
+}
+
+function viewCache() {
+    fetch('/api/notion/cached-content')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Cached content:', data);
+            alert(`Cached Content Summary:\n\nServices: ${data.services ? data.services.length : 0}\nNews: ${data.news ? data.news.length : 0}\nTestimonials: ${data.testimonials ? data.testimonials.length : 0}\nFeatured: ${data.featured ? data.featured.length : 0}\n\nLast Sync: ${data.last_sync || 'Never'}\nSync Status: ${data.sync_status || 'Unknown'}\n\n(Full data logged to console)`);
+        })
+        .catch(error => {
+            alert('Error viewing cache: ' + error);
         });
 }
 </script>

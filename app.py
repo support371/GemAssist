@@ -33,15 +33,25 @@ try:
         get_featured_content,
         create_sample_content
     )
+    from notion_content_sync import (
+        content_sync,
+        auto_sync_content,
+        get_cached_content,
+        initialize_default_content
+    )
     CMS_AVAILABLE = True
 except ImportError:
     CMS_AVAILABLE = False
     notion_cms = None
+    content_sync = None
     get_services_from_notion = lambda: []
     get_news_from_notion = lambda: []
     get_testimonials_from_notion = lambda: []
     get_featured_content = lambda: []
     create_sample_content = lambda: False
+    auto_sync_content = lambda: {}
+    get_cached_content = lambda: {}
+    initialize_default_content = lambda: False
     logging.warning("Notion CMS not available")
 
 # Set up logging for debugging
@@ -196,7 +206,14 @@ def services():
     # Get services content from Notion if available
     notion_services = []
     if CMS_AVAILABLE:
-        notion_services = get_services_from_notion()
+        # Try to get content from cache first, then sync if needed
+        cached = get_cached_content()
+        notion_services = cached.get('services', [])
+        
+        # If no cached content, try to sync
+        if not notion_services:
+            content = auto_sync_content()
+            notion_services = content.get('services', [])
     
     return render_template('services.html', notion_services=notion_services)
 
@@ -496,7 +513,14 @@ def news():
     # Get news from Notion if available
     notion_news = []
     if CMS_AVAILABLE:
-        notion_news = get_news_from_notion()
+        # Try to get content from cache first, then sync if needed
+        cached = get_cached_content()
+        notion_news = cached.get('news', [])
+        
+        # If no cached content, try to sync
+        if not notion_news:
+            content = auto_sync_content()
+            notion_news = content.get('news', [])
     
     return render_template('news.html', notion_news=notion_news)
 
@@ -756,20 +780,19 @@ def api_notion_sync():
         return jsonify({'error': 'Notion CMS not available'}), 503
     
     try:
-        # Refresh content from Notion
-        services = get_services_from_notion()
-        news = get_news_from_notion()
-        testimonials = get_testimonials_from_notion()
-        featured = get_featured_content()
+        # Use the sync service to refresh and cache content
+        content = auto_sync_content()
         
         return jsonify({
             'success': True,
             'content_counts': {
-                'services': len(services),
-                'news': len(news),
-                'testimonials': len(testimonials),
-                'featured': len(featured)
-            }
+                'services': len(content.get('services', [])),
+                'news': len(content.get('news', [])),
+                'testimonials': len(content.get('testimonials', [])),
+                'featured': len(content.get('featured', []))
+            },
+            'last_sync': content.get('last_sync'),
+            'sync_status': content.get('sync_status')
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -808,8 +831,10 @@ def notion_initialize():
         return jsonify({'error': 'Notion CMS not available'}), 503
     
     try:
-        success = create_sample_content()
+        success = initialize_default_content()
         if success:
+            # Sync the new content to cache
+            auto_sync_content()
             flash('Sample content created successfully in Notion!', 'success')
         else:
             flash('Failed to create sample content. Please check your Notion configuration.', 'error')
@@ -817,6 +842,46 @@ def notion_initialize():
         flash(f'Error: {str(e)}', 'error')
     
     return redirect(url_for('notion_setup'))
+
+@app.route('/service/<slug>')
+def service_detail(slug):
+    """Display individual service content from Notion"""
+    if CMS_AVAILABLE and content_sync:
+        service = content_sync.get_service_by_slug(slug)
+        if service:
+            return render_template('notion_content_display.html', 
+                                 content=service, 
+                                 page_title=service.get('title', 'Service'))
+    
+    # Fallback to 404 if not found
+    return render_template('index.html'), 404
+
+@app.route('/api/notion/clear-cache', methods=['POST'])
+def api_clear_cache():
+    """Clear the Notion content cache"""
+    if not CMS_AVAILABLE:
+        return jsonify({'error': 'Notion CMS not available'}), 503
+    
+    try:
+        success = content_sync.clear_cache()
+        if success:
+            return jsonify({'success': True, 'message': 'Cache cleared successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to clear cache'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/notion/cached-content')
+def api_cached_content():
+    """Get cached content without syncing"""
+    if not CMS_AVAILABLE:
+        return jsonify({'error': 'Notion CMS not available'}), 503
+    
+    try:
+        cached = get_cached_content()
+        return jsonify(cached)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.errorhandler(404)
 def not_found_error(error):
