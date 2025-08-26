@@ -57,15 +57,15 @@ except ImportError:
 # Set up logging for debugging
 logging.basicConfig(level=logging.DEBUG)
 
-# Import Telegram Bot Handler
+# Import GEM Telegram Workflow Bots
 try:
-    from telegram_bot_handler import TelegramBotHandler, AutomationWorkflows
-    telegram_bot_instance = TelegramBotHandler()
+    from gem_telegram_workflows import GEMWorkflowBots, GEMAutomationWorkflows
+    telegram_bot_instance = GEMWorkflowBots()
     BOT_AVAILABLE = True
 except ImportError as e:
     BOT_AVAILABLE = False
     telegram_bot_instance = None
-    logging.warning(f"Telegram bot handler not available: {e}")
+    logging.warning(f"GEM Telegram workflow bots not available: {e}")
 
 def get_notion_team_data():
     """Fetch team member data from Notion database"""
@@ -315,14 +315,14 @@ def test_bot():
     if not BOT_AVAILABLE:
         return jsonify({'status': 'error', 'message': 'Bot handler not available'}), 503
     
-    # Test bot configuration
+    # Test bot configuration for GEM workflow bots
     tests = {
         'bot_handler': 'Available' if telegram_bot_instance else 'Not Available',
-        'bot_token': 'Configured' if telegram_bot_instance and telegram_bot_instance.bot_token else 'Not Configured',
-        'channel_id': 'Configured' if telegram_bot_instance and telegram_bot_instance.channel_id else 'Not Configured',
-        'make_webhook': 'Configured' if telegram_bot_instance and telegram_bot_instance.make_webhook_url else 'Not Configured',
-        'commands': len(telegram_bot_instance.command_handlers) if telegram_bot_instance else 0,
-        'status': 'Ready' if telegram_bot_instance and telegram_bot_instance.bot_token else 'Needs Configuration'
+        'active_token': 'Configured' if telegram_bot_instance and telegram_bot_instance.active_bot else 'Not Configured',
+        'bots_configured': len(telegram_bot_instance.bot_configs) if telegram_bot_instance else 0,
+        'integrations': list(telegram_bot_instance.integrations.keys()) if telegram_bot_instance else [],
+        'channels': list(telegram_bot_instance.channels.keys()) if telegram_bot_instance else [],
+        'status': 'Ready' if telegram_bot_instance and telegram_bot_instance.active_bot else 'Needs Configuration'
     }
     
     return jsonify(tests), 200
