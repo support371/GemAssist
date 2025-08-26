@@ -57,6 +57,16 @@ except ImportError:
 # Set up logging for debugging
 logging.basicConfig(level=logging.DEBUG)
 
+# Import Telegram Bot Handler
+try:
+    from telegram_bot_handler import TelegramBotHandler, AutomationWorkflows
+    telegram_bot_instance = TelegramBotHandler()
+    BOT_AVAILABLE = True
+except ImportError as e:
+    BOT_AVAILABLE = False
+    telegram_bot_instance = None
+    logging.warning(f"Telegram bot handler not available: {e}")
+
 def get_notion_team_data():
     """Fetch team member data from Notion database"""
     if not NOTION_LIBRARY_AVAILABLE or not NotionClient:
@@ -226,6 +236,96 @@ def contact():
 def telegram_bot():
     """Telegram bot automation services"""
     return render_template('telegram.html')
+
+# Telegram Bot Webhook Endpoints
+@app.route('/telegram/webhook', methods=['POST'])
+def telegram_webhook():
+    """Handle incoming Telegram bot updates"""
+    if not BOT_AVAILABLE:
+        return jsonify({'error': 'Bot handler not available'}), 503
+    
+    try:
+        # Get update data
+        update = request.get_json()
+        
+        # Verify webhook signature if needed
+        signature = request.headers.get('X-Telegram-Bot-Api-Secret-Token', '')
+        
+        # Process the update
+        result = telegram_bot_instance.process_update(update)
+        
+        logging.info(f"Telegram webhook processed: {result}")
+        
+        return jsonify(result), 200
+    except Exception as e:
+        logging.error(f"Telegram webhook error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/make/webhook', methods=['POST'])
+def make_webhook():
+    """Handle incoming Make.com automation triggers"""
+    try:
+        # Get webhook data
+        data = request.get_json()
+        event_type = data.get('event_type', 'unknown')
+        
+        logging.info(f"Make.com webhook received: {event_type}")
+        
+        # Process based on event type
+        if event_type == 'security_alert':
+            # Broadcast security alert to Telegram channel
+            if BOT_AVAILABLE and telegram_bot_instance:
+                message = data.get('message', 'Security alert detected')
+                telegram_bot_instance.broadcast_to_channel(message, 'danger')
+        
+        elif event_type == 'property_update':
+            # Handle property updates
+            if BOT_AVAILABLE and telegram_bot_instance:
+                message = f"Property Update: {data.get('property', 'Unknown')} - {data.get('status', 'Updated')}"
+                telegram_bot_instance.broadcast_to_channel(message, 'info')
+        
+        elif event_type == 'recovery_update':
+            # Handle recovery case updates
+            if BOT_AVAILABLE and telegram_bot_instance:
+                message = f"Recovery Update: Case {data.get('case_id', 'Unknown')} - {data.get('status', 'In Progress')}"
+                telegram_bot_instance.broadcast_to_channel(message, 'warning')
+        
+        return jsonify({'status': 'success', 'event': event_type}), 200
+        
+    except Exception as e:
+        logging.error(f"Make webhook error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/telegram/bot-setup')
+def telegram_bot_setup():
+    """Telegram bot setup instructions"""
+    # Check environment variable status
+    bot_token_set = bool(os.environ.get('TELEGRAM_BOT_TOKEN'))
+    channel_id_set = bool(os.environ.get('TELEGRAM_CHANNEL_ID'))
+    make_webhook_set = bool(os.environ.get('MAKE_WEBHOOK_URL'))
+    
+    return render_template('telegram_setup.html',
+                         bot_token_set=bot_token_set,
+                         channel_id_set=channel_id_set,
+                         make_webhook_set=make_webhook_set)
+
+@app.route('/telegram/test-bot', methods=['GET'])
+def test_bot():
+    """Test bot functionality endpoint"""
+    if not BOT_AVAILABLE:
+        return jsonify({'status': 'error', 'message': 'Bot handler not available'}), 503
+    
+    # Test bot configuration
+    tests = {
+        'bot_handler': 'Available' if telegram_bot_instance else 'Not Available',
+        'bot_token': 'Configured' if telegram_bot_instance and telegram_bot_instance.bot_token else 'Not Configured',
+        'channel_id': 'Configured' if telegram_bot_instance and telegram_bot_instance.channel_id else 'Not Configured',
+        'make_webhook': 'Configured' if telegram_bot_instance and telegram_bot_instance.make_webhook_url else 'Not Configured',
+        'commands': len(telegram_bot_instance.command_handlers) if telegram_bot_instance else 0,
+        'status': 'Ready' if telegram_bot_instance and telegram_bot_instance.bot_token else 'Needs Configuration'
+    }
+    
+    return jsonify(tests), 200
 
 @app.route('/recovery-service-handbook')
 def recovery_service():
