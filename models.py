@@ -108,7 +108,7 @@ class VIPBoardMember(db.Model):
     title = Column(String(200))
     bio = Column(Text)
     headshot_url = Column(String(500))  # Path to uploaded headshot
-    linkedin_url = Column(String(200))
+    alignable_url = Column(String(200))
     email = Column(String(120))
     years_experience = Column(Integer)
     specialties = Column(Text)  # Comma-separated specialties
@@ -126,7 +126,7 @@ class BoardMember(db.Model):
     department = Column(String(100))  # Executive, Advisory, Operations, etc.
     bio = Column(Text)
     photo_url = Column(String(500))
-    linkedin_url = Column(String(200))
+    alignable_url = Column(String(200))
     email = Column(String(120))
     phone = Column(String(20))
     start_date = Column(Date)
