@@ -480,15 +480,27 @@ def monitoring():
 @app.route('/real-estate-testimonials')
 def testimonials():
     """Client testimonials for real estate services"""
-    if USE_DATABASE:
+    # Try to get testimonials from Notion first
+    notion_testimonials = []
+    if CMS_AVAILABLE:
+        cached = get_cached_content()
+        notion_testimonials = cached.get('testimonials', [])
+        
+        # If no cached content, try to sync
+        if not notion_testimonials:
+            content = auto_sync_content()
+            notion_testimonials = content.get('testimonials', [])
+    
+    # Fallback to database testimonials if available
+    featured_testimonials = []
+    regular_testimonials = []
+    if USE_DATABASE and not notion_testimonials:
         approved_testimonials = Testimonial.query.filter_by(status=TestimonialStatus.APPROVED).order_by(Testimonial.display_order, Testimonial.submitted_at.desc()).all()
         featured_testimonials = [t for t in approved_testimonials if t.is_featured]
         regular_testimonials = [t for t in approved_testimonials if not t.is_featured]
-    else:
-        featured_testimonials = []
-        regular_testimonials = []
     
     return render_template('testimonials.html', 
+                         notion_testimonials=notion_testimonials,
                          featured_testimonials=featured_testimonials,
                          regular_testimonials=regular_testimonials)
 
@@ -527,12 +539,30 @@ def news():
 @app.route('/teams')
 def teams():
     """Team members and structure"""
-    team_data = get_notion_team_data()
-    cybersecurity_team, real_estate_team = categorize_team_members(team_data)
+    # Try to get team members from Notion CMS first
+    notion_team = []
+    if CMS_AVAILABLE:
+        cached = get_cached_content()
+        notion_team = cached.get('team_members', [])
+        
+        # If no cached content, try to sync
+        if not notion_team:
+            content = auto_sync_content()
+            notion_team = content.get('team_members', [])
+    
+    # Fallback to custom client if available
+    if not notion_team:
+        team_data = get_notion_team_data()
+        cybersecurity_team, real_estate_team = categorize_team_members(team_data)
+    else:
+        # Categorize Notion team members
+        cybersecurity_team = [m for m in notion_team if 'Cybersecurity' in m.get('category', [])]
+        real_estate_team = [m for m in notion_team if 'Real Estate' in m.get('category', [])]
     
     return render_template('teams.html', 
                          cybersecurity_team=cybersecurity_team,
-                         real_estate_team=real_estate_team)
+                         real_estate_team=real_estate_team,
+                         notion_team=notion_team)
 
 @app.route('/investment-portfolio')
 def investment_portfolio():
@@ -811,11 +841,13 @@ def notion_setup():
     content_stats = {}
     if notion_configured:
         try:
+            # Use cached content for better performance
+            cached = get_cached_content()
             content_stats = {
-                'services': len(get_services_from_notion()),
-                'news': len(get_news_from_notion()),
-                'testimonials': len(get_testimonials_from_notion()),
-                'featured': len(get_featured_content())
+                'services': len(cached.get('services', [])),
+                'news': len(cached.get('news', [])),
+                'testimonials': len(cached.get('testimonials', [])),
+                'featured': len(cached.get('featured', []))
             }
         except:
             content_stats = {}
@@ -823,6 +855,16 @@ def notion_setup():
     return render_template('notion_setup.html', 
                          notion_configured=notion_configured,
                          content_stats=content_stats)
+
+@app.route('/admin/notion-onboarding')
+def notion_onboarding():
+    """Notion CMS onboarding guide"""
+    has_secret = os.environ.get('NOTION_INTEGRATION_SECRET') is not None
+    has_database = os.environ.get('NOTION_DATABASE_ID') is not None
+    
+    return render_template('notion_onboarding.html',
+                         has_secret=has_secret,
+                         has_database=has_database)
 
 @app.route('/admin/notion-setup/initialize', methods=['POST'])
 def notion_initialize():
