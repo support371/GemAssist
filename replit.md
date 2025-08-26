@@ -2,6 +2,8 @@
 
 Gem Assist Enterprise is a professional security and trust services platform that combines cybersecurity expertise with real estate services through a partnership with Alliance Trust Realty LLC. The platform offers comprehensive digital threat monitoring, asset recovery, legal documentation services, and automated communication solutions. Built with Flask, the application serves as a corporate website showcasing various professional services including cybersecurity monitoring, Telegram bot automation, power of attorney services, investment portfolio management, and client access portals.
 
+The platform now features Notion CMS integration for dynamic content management, allowing administrators to manage website content directly from their Notion database.
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.
@@ -58,6 +60,7 @@ Preferred communication style: Simple, everyday language.
 - **Environment Variables**: SESSION_SECRET for secure session management
 
 ## Service Integrations
+- **Notion CMS**: Comprehensive content management system for managing services, news, testimonials, and featured content
 - **Telegram Bot API**: Referenced for automation services (implementation pending)
 - **Security Monitoring Systems**: Placeholder for threat detection integrations
 - **Real Estate Platforms**: Integration points for Alliance Trust Realty LLC services

@@ -23,6 +23,27 @@ except ImportError:
     get_leadership_data_from_notion = lambda: []
     logging.warning("Custom leadership client not available")
 
+# Import Notion CMS
+try:
+    from notion_cms import (
+        notion_cms, 
+        get_services_from_notion,
+        get_news_from_notion,
+        get_testimonials_from_notion,
+        get_featured_content,
+        create_sample_content
+    )
+    CMS_AVAILABLE = True
+except ImportError:
+    CMS_AVAILABLE = False
+    notion_cms = None
+    get_services_from_notion = lambda: []
+    get_news_from_notion = lambda: []
+    get_testimonials_from_notion = lambda: []
+    get_featured_content = lambda: []
+    create_sample_content = lambda: False
+    logging.warning("Notion CMS not available")
+
 # Set up logging for debugging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -172,7 +193,12 @@ def about():
 @app.route('/services')
 def services():
     """Services overview page"""
-    return render_template('services.html')
+    # Get services content from Notion if available
+    notion_services = []
+    if CMS_AVAILABLE:
+        notion_services = get_services_from_notion()
+    
+    return render_template('services.html', notion_services=notion_services)
 
 @app.route('/contact')
 def contact():
@@ -467,7 +493,12 @@ def admin_panel():
 @app.route('/gem-news-and-newsletter')
 def news():
     """News and newsletter page"""
-    return render_template('news.html')
+    # Get news from Notion if available
+    notion_news = []
+    if CMS_AVAILABLE:
+        notion_news = get_news_from_notion()
+    
+    return render_template('news.html', notion_news=notion_news)
 
 @app.route('/teams')
 def teams():
@@ -696,6 +727,96 @@ def feature_testimonial(id):
     status = 'featured' if testimonial.is_featured else 'unfeatured'
     flash(f'Testimonial {status} successfully!', 'success')
     return redirect(url_for('admin_testimonials'))
+
+# Notion CMS API endpoints
+@app.route('/api/notion/content/<content_type>')
+def api_notion_content(content_type):
+    """API endpoint to get content from Notion CMS"""
+    if not CMS_AVAILABLE:
+        return jsonify({'error': 'Notion CMS not available'}), 503
+    
+    content = []
+    if content_type == 'services':
+        content = get_services_from_notion()
+    elif content_type == 'news':
+        content = get_news_from_notion()
+    elif content_type == 'testimonials':
+        content = get_testimonials_from_notion()
+    elif content_type == 'featured':
+        content = get_featured_content()
+    else:
+        return jsonify({'error': 'Invalid content type'}), 400
+    
+    return jsonify(content)
+
+@app.route('/api/notion/sync', methods=['POST'])
+def api_notion_sync():
+    """Sync content from Notion database"""
+    if not CMS_AVAILABLE:
+        return jsonify({'error': 'Notion CMS not available'}), 503
+    
+    try:
+        # Refresh content from Notion
+        services = get_services_from_notion()
+        news = get_news_from_notion()
+        testimonials = get_testimonials_from_notion()
+        featured = get_featured_content()
+        
+        return jsonify({
+            'success': True,
+            'content_counts': {
+                'services': len(services),
+                'news': len(news),
+                'testimonials': len(testimonials),
+                'featured': len(featured)
+            }
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/admin/notion-setup')
+def notion_setup():
+    """Setup page for Notion CMS configuration"""
+    if not CMS_AVAILABLE:
+        flash('Notion CMS is not available. Please check your configuration.', 'error')
+        return redirect(url_for('admin_panel'))
+    
+    # Check if Notion is configured
+    notion_configured = notion_cms.client is not None
+    
+    # Get current content stats if configured
+    content_stats = {}
+    if notion_configured:
+        try:
+            content_stats = {
+                'services': len(get_services_from_notion()),
+                'news': len(get_news_from_notion()),
+                'testimonials': len(get_testimonials_from_notion()),
+                'featured': len(get_featured_content())
+            }
+        except:
+            content_stats = {}
+    
+    return render_template('notion_setup.html', 
+                         notion_configured=notion_configured,
+                         content_stats=content_stats)
+
+@app.route('/admin/notion-setup/initialize', methods=['POST'])
+def notion_initialize():
+    """Initialize Notion database with sample content"""
+    if not CMS_AVAILABLE:
+        return jsonify({'error': 'Notion CMS not available'}), 503
+    
+    try:
+        success = create_sample_content()
+        if success:
+            flash('Sample content created successfully in Notion!', 'success')
+        else:
+            flash('Failed to create sample content. Please check your Notion configuration.', 'error')
+    except Exception as e:
+        flash(f'Error: {str(e)}', 'error')
+    
+    return redirect(url_for('notion_setup'))
 
 @app.errorhandler(404)
 def not_found_error(error):
