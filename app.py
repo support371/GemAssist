@@ -151,9 +151,15 @@ def categorize_team_members(team_members):
     
     return cybersecurity_team, real_estate_team
 
+# Import media blueprint
+from media_server import media_bp
+
 # Create the Flask app
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "gem-assist-enterprise-secret-key")
+
+# Register media blueprint
+app.register_blueprint(media_bp)
 
 # Database configuration
 database_url = os.environ.get('DATABASE_URL')
