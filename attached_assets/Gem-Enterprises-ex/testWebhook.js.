@@ -1,0 +1,17 @@
+const fetch = require('node-fetch');
+
+const WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/23374952/umhjwwq/';
+
+const payload = {
+  user: 'test_user',
+  action: 'test_trigger'
+};
+
+fetch(WEBHOOK_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => console.log('Success:', data))
+.catch(error => console.error('Error:', error));
