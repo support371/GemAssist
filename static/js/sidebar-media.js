@@ -188,7 +188,7 @@ const apiRequest = async (endpoint, data, method = 'POST') => {
 const generateImage = async () => {
     const prompt = document.getElementById('image-prompt')?.value?.trim();
     const size = document.getElementById('image-size')?.value || '1024x1024';
-    const style = document.getElementById('image-style')?.value || 'vivid';
+    const imageStyle = document.getElementById('image-style')?.value || 'vivid';
     
     if (!prompt) {
         showError('image-error', 'Please enter an image description');
@@ -201,7 +201,7 @@ const generateImage = async () => {
         const result = await apiRequest('/image', {
             prompt,
             size,
-            style,
+            style: imageStyle,
             quality: 'hd'
         });
         
