@@ -575,6 +575,11 @@ def approve_membership(id):
     flash(f'Membership {membership.member_id} approved!', 'success')
     return redirect(url_for('admin_memberships'))
 
+@app.route('/media-generator')
+def media_generator():
+    """AI Media Generator - Enterprise content creation"""
+    return render_template('sidebar-media.html')
+
 @app.route('/market-insights')
 def market_insights():
     """Active Market Insights and Trends"""
