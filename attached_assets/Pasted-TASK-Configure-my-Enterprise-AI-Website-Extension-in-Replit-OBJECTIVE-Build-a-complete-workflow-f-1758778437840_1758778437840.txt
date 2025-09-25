@@ -1,0 +1,104 @@
+TASK: Configure my Enterprise AI Website Extension in Replit
+
+OBJECTIVE: Build a complete workflow for an enterprise-grade website with AI-powered page building, image/video generation, TTS, humanized chat/calls, integrations, and deployment. The assistant should produce all code/files, instructions, and setup guides in incremental steps suitable for low credit usage.
+
+---
+
+STEP 1: Generate backend server (`server-media.js`)
+- Include Express endpoints:
+  1) /api/media/image → generate images using OpenAI (prompt, style, size)
+  2) /api/media/video → generate videos (Replicate, Runway Gen-2)
+  3) /api/media/tts → text-to-speech using ElevenLabs or Amazon Polly
+  4) /api/chat → humanized AI chat with short-term memory
+  5) /api/call/place → humanized calls using Twilio with TTS playback
+- Upload generated assets to AWS S3 if credentials exist; otherwise return data URLs
+- Write generated snippets to `generated-assets/` folder
+- Include error handling, console logging, and comments
+- Use environment variables for API keys and secrets
+- Output only code, ready to copy
+
+---
+
+STEP 2: Generate sidebar UI HTML (`sidebar-media.html`)
+- Include input fields and buttons for:
+  1) Generate Image
+  2) Generate Video
+  3) Synthesize Voice (TTS)
+- Display results preview and snippet path
+- Minimal styling and clear section labels
+- Output only HTML, ready to copy
+
+---
+
+STEP 3: Generate sidebar JS (`sidebar-media.js`)
+- Connect sidebar UI to backend endpoints
+- Call /api/media/image, /api/media/video, /api/media/tts using fetch
+- Write HTML snippet files to `generated-assets/`
+- Display preview and snippet path
+- Handle errors gracefully
+- Output only JS, ready to copy
+
+---
+
+STEP 4: Generate environment template (`.env.example`)
+- Include:
+  OPENAI_API_KEY
+  ELEVENLABS_KEY
+  IMAGE_KEY (optional)
+  VIDEO_KEY (optional)
+  TWILIO_SID, TWILIO_TOKEN, TWILIO_PHONE
+  AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME, AWS_REGION
+  GCP_PROJECT_ID, GCP_SA_KEY
+  DEPLOY_TARGET
+  SLACK_OAUTH, NOTION_TOKEN (optional)
+- Output only text, ready to copy
+
+---
+
+STEP 5: Generate deployment workflow (GitHub Actions)
+- Trigger on push to main
+- Install dependencies (npm install)
+- Run linting and tests
+- Deploy to:
+  1) GitHub Pages
+  2) AWS S3 + CloudFront
+  3) Google Cloud App Engine
+- Use DEPLOY_TARGET secret to select deployment
+- Output only YAML, ready to copy
+
+---
+
+STEP 6: Generate local testing instructions
+- Step-by-step guide to:
+  1) Test server-media.js endpoints locally
+  2) Test sidebar buttons calling the backend
+  3) Verify generated assets and snippet creation
+  4) Test deployment to GitHub Pages, AWS, GCP
+- Keep instructions concise for Replit workspace
+
+---
+
+STEP 7: Optional incremental features (add later if needed)
+- Chat agent memory & persona: store session memory and maintain brand voice
+- Video generation enhancements: script-based generation, job polling, snippet creation
+- Integration connectors: Slack, Notion, Zapier, webhooks with OAuth
+
+---
+
+GUIDELINES FOR ASSISTANT:
+- Provide one file at a time per step for low credit usage
+- Include comments and instructions for each file
+- Do not combine unrelated endpoints into one response
+- Focus on code quality, readability, and enterprise standards
+- After generating each step, prompt for the next step to continue workflow
+
+---
+
+OUTPUT EXPECTED:
+- `server-media.js` (backend)
+- `sidebar-media.html` (UI)
+- `sidebar-media.js` (UI logic)
+- `.env.example` (env template)
+- GitHub Actions workflow YAML
+- Local testing instructions
+- Optional incremental features ready for expansion
