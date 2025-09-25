@@ -151,15 +151,22 @@ def categorize_team_members(team_members):
     
     return cybersecurity_team, real_estate_team
 
-# Import media blueprint
-from media_server import media_bp
+# Try to import media blueprint (optional feature)
+try:
+    from media_server import media_bp
+    MEDIA_SERVER_AVAILABLE = True
+except ImportError as e:
+    MEDIA_SERVER_AVAILABLE = False
+    media_bp = None
+    logging.warning(f"Media server not available: {e}")
 
 # Create the Flask app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "gem-assist-enterprise-secret-key")
+app.secret_key = os.environ.get("SESSION_SECRET")
 
-# Register media blueprint
-app.register_blueprint(media_bp)
+# Register media blueprint if available
+if MEDIA_SERVER_AVAILABLE and media_bp:
+    app.register_blueprint(media_bp)
 
 # Database configuration
 database_url = os.environ.get('DATABASE_URL')
