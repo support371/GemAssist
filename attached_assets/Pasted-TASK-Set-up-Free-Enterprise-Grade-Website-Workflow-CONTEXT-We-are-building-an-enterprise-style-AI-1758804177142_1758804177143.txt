@@ -1,0 +1,65 @@
+TASK: Set up Free Enterprise-Grade Website Workflow
+
+CONTEXT:
+We are building an enterprise-style AI-powered website. The workflow includes:
+- Front-end on GitHub Pages (static site)
+- Back-end as serverless APIs (Vercel or Netlify)
+- Neon PostgreSQL database (free tier)
+
+GOAL:
+Create all necessary backend API files and wiring to connect the front-end to Neon, while keeping everything free and ready to deploy.
+
+STEPS FOR ASSISTANT:
+
+1️⃣ Generate Backend API Files
+- Create serverless API endpoints (JS/Python) for:
+  /api/media/image → OpenAI DALL-E
+  /api/media/video → Runway Gen-2
+  /api/media/tts → ElevenLabs / Polly
+  /api/media/chat → AI chat with memory
+  /api/media/call/place → Twilio calls
+- Each endpoint should:
+  - Receive JSON POST requests
+  - Return JSON responses
+  - Include error handling and logging
+  - Read secrets from environment variables
+
+2️⃣ Connect to Neon PostgreSQL
+- Generate code to connect backend to Neon using SSL:
+  - Store connection string in environment variable
+  - Provide sample query for storing/retrieving media assets
+  - Include comments for secure handling
+
+3️⃣ Front-End Integration
+- Provide JS snippet for fetch requests to serverless backend endpoints
+- Include example call for each endpoint
+
+4️⃣ File & Directory Structure
+- Place backend files in `/api/` folder (Vercel/Netlify compatible)
+- Front-end code is separate (assume GitHub Pages deployment)
+- Include `generated-assets/` folder references for media preview
+
+5️⃣ Environment Variables Setup
+- List required environment variables for backend:
+  OPENAI_API_KEY, ELEVENLABS_KEY, TWILIO_SID/TOKEN, NEON_DATABASE_URL
+- Include placeholder values and comments
+
+6️⃣ Instructions for Deployment
+- Backend: Push `/api/` folder to GitHub → connect to Vercel/Netlify
+- Front-end: Push to GitHub → deploy via GitHub Pages
+- Include CORS and HTTPS recommendations for connecting front-end to backend
+
+7️⃣ Testing Steps
+- Provide short instructions to test:
+  - Image generation
+  - Video generation
+  - TTS
+  - Chat
+  - Calls
+- Include verification for database connections
+
+GUIDELINES:
+- Keep code modular and readable
+- Include comments for guidance
+- Optimize for free-tier hosting and enterprise-style workflow
+- Output ready-to-copy code and instructions, one file at a time if needed
