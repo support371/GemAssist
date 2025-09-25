@@ -102,9 +102,36 @@
                 </div>
             </div>
 
-            <!-- Right Visual - Interactive Dashboard -->
+            <!-- Right Visual - Interactive Dashboard with Security Operations Image -->
             <div class="col-xl-7 col-lg-6 order-lg-2 order-1">
                 <div class="hero-visual-modern">
+                    <!-- Security Operations Center Image -->
+                    <div class="security-operations-preview mb-4">
+                        <div class="operations-image-container">
+                            <img src="{{ url_for('static', filename='images/Cybersecurity_operations_center_22991021.png') }}" 
+                                 alt="Cybersecurity Operations Center" 
+                                 class="operations-image">
+                            <div class="operations-overlay">
+                                <div class="overlay-content">
+                                    <div class="status-badge-overlay">
+                                        <div class="pulse-dot-overlay"></div>
+                                        <span>Systems Operational</span>
+                                    </div>
+                                    <div class="real-time-metrics">
+                                        <div class="metric-overlay">
+                                            <strong>1,247</strong>
+                                            <small>Threats Blocked</small>
+                                        </div>
+                                        <div class="metric-overlay">
+                                            <strong>99.9%</strong>
+                                            <small>Uptime</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Live Security Dashboard -->
                     <div class="dashboard-container">
                         <div class="dashboard-header-modern">

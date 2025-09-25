@@ -315,29 +315,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Counter animation for statistics
-        const counters = document.querySelectorAll('.stat-item h3, .performance-metric h4');
+        const counters = document.querySelectorAll('.stat-item h3, .performance-metric h4, [data-animate="counter"]');
         counters.forEach(counter => {
-            const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
+            const target = counter.dataset.count ? 
+                parseFloat(counter.dataset.count) : 
+                parseInt(counter.textContent.replace(/[^\d\.]/g, ''));
             if (target) {
-                animateCounter(counter, target);
+                animateCounter(counter, target, counter.dataset.count);
             }
         });
     }
 
-    function animateCounter(element, target) {
+    function animateCounter(element, target, isDecimal) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const duration = 2000;
                     const start = performance.now();
-                    const originalText = element.textContent;
 
                     function updateCounter(currentTime) {
                         const elapsed = currentTime - start;
                         const progress = Math.min(elapsed / duration, 1);
-                        const current = Math.floor(progress * target);
+                        const current = isDecimal ? 
+                            (progress * target).toFixed(1) : 
+                            Math.floor(progress * target);
 
-                        element.textContent = originalText.replace(/\d+/, current);
+                        element.textContent = current;
 
                         if (progress < 1) {
                             requestAnimationFrame(updateCounter);
@@ -539,8 +542,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(loaderStyle);
 
     // Create enhanced security console styling
-    const securityStyle = document.createElement('style');
-    securityStyle.textContent = `
+    const enhancedSecurityStyle = document.createElement('style');
+    enhancedSecurityStyle.textContent = `
         .admin-login-card, .security-dashboard {
             cursor: not-allowed !important; /* Indicate restricted interaction */
         }
@@ -548,7 +551,7 @@ document.addEventListener('DOMContentLoaded', function() {
             box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Enhance alert visibility */
         }
     `;
-    document.head.appendChild(securityStyle);
+    document.head.appendChild(enhancedSecurityStyle);
 
 
     // Console security message
