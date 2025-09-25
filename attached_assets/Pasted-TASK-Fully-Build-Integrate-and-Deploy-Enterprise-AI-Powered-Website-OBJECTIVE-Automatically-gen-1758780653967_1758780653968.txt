@@ -1,0 +1,87 @@
+TASK: Fully Build, Integrate, and Deploy Enterprise AI-Powered Website
+
+OBJECTIVE:
+Automatically generate all backend, frontend, environment, asset, and deployment files for a secure, enterprise-grade website handling financial, legal, and compliance services. Place all files in correct directories in Replit workspace, apply enterprise best practices, and prepare for AWS/GCP deployment.
+
+---
+
+STEP 1: Backend (`server-media.js`)
+- Create Express endpoints:
+    /api/media/image → OpenAI image generation
+    /api/media/video → Replicate / Runway Gen-2 video
+    /api/media/tts → ElevenLabs / Amazon Polly TTS
+    /api/media/chat → Humanized chat with memory
+    /api/media/call/place → Twilio voice calls with TTS
+- Store generated assets in `generated-assets/` and optionally AWS S3 or GCP bucket
+- Include error handling, logging, comments
+- Read all secrets from environment variables
+
+---
+
+STEP 2: Sidebar UI HTML (`sidebar-media.html`)
+- Input fields and buttons for image, video, TTS
+- Preview results and snippet paths
+- Integrate with Flask template system
+- Minimal styling and comments
+- Place in `templates/`
+
+---
+
+STEP 3: Sidebar JS (`sidebar-media.js`)
+- Handle button clicks and fetch requests to backend endpoints
+- Display previews and snippet paths
+- Write HTML snippets to `generated-assets/`
+- Include error handling and comments
+- Place in `static/js/`
+
+---
+
+STEP 4: Flask Route
+- Add route `/media-generator` to serve sidebar-media.html
+- Ensure optional sidebar embedding in other templates
+
+---
+
+STEP 5: Environment Configuration (`.env.example`)
+- Include:
+  OPENAI_API_KEY, ELEVENLABS_KEY, IMAGE_KEY, VIDEO_KEY,
+  TWILIO_SID, TWILIO_TOKEN, TWILIO_PHONE,
+  AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME, AWS_REGION,
+  GCP_PROJECT_ID, GCP_SA_KEY,
+  DEPLOY_TARGET, SLACK_OAUTH, NOTION_TOKEN
+- Use secure storage and least privilege
+
+---
+
+STEP 6: GitHub Actions Deployment Workflow
+- Run on push to main
+- Lint, test, security scan
+- Deploy to:
+    AWS S3 + CloudFront (static), EC2 / Lambda / API Gateway (backend)
+    GCP App Engine / Cloud Storage + CDN
+- Use DEPLOY_TARGET to choose
+- Include HTTPS, IAM policies, CSP headers, encryption, logging, monitoring
+- Output YAML ready-to-copy
+
+---
+
+STEP 7: Testing Instructions
+- Provide local testing for backend endpoints, sidebar UI, asset generation
+- Include deployment verification for AWS or GCP
+- Ensure compliance and secure handling of financial/legal data
+
+---
+
+STEP 8: Optional Enhancements (if capacity allows)
+- Chat agent memory/persona
+- Multi-turn voice calls
+- Integration connectors: Slack, Notion, Zapier
+- Compliance-aware logging, retention policies
+
+---
+
+GUIDELINES:
+- Generate and place **one file at a time**, verifying correctness
+- Follow enterprise best practices: modular design, error handling, logging, CI/CD readiness
+- Protect sensitive financial, legal, and compliance data
+- Output **ready-to-drop files** in correct directories
