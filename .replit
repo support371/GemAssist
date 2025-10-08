@@ -2,7 +2,7 @@ modules = ["python-3.11", "nodejs-20"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["openssl", "postgresql", "unzip"]
+packages = ["openssl", "postgresql", "unzip", "nano"]
 
 [deployment]
 deploymentTarget = "autoscale"
@@ -23,11 +23,24 @@ args = "Start application"
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
+<<<<<<< HEAD
+=======
+mode = "sequential"
+>>>>>>> 171d3fa3da84255e10ef282644e05c8b50f3d62e
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Autodebuger"
+mode = "sequential"
+author = 45974913
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "#!/bin/bash  while true; do   clear   echo \"🚀 Running main.py...\"   python3 main.py > app.log 2>&1   STATUS=$?   TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')    if [ $STATUS -ne 0 ]; then     echo \"❌ Crash detected at $TIMESTAMP\"     echo \"🔍 Error summary:\"     tail -n 10 app.log     echo     echo \"🧠 Attempting to analyze error...\"     ERROR=$(tail -n 10 app.log | grep \"Traceback\" -A 5 | tail -n 5)      if echo \"$ERROR\" | grep -qi \"SyntaxError\"; then       echo \"💡 Suggestion: Check for missing colons, indentation, or unmatched quotes.\"     elif echo \"$ERROR\" | grep -qi \"ImportError\"; then       echo \"💡 Suggestion: Missing dependency — try 'pip install <package>'.\"     elif echo \"$ERROR\" | grep -qi \"ModuleNotFoundError\"; then       echo \"💡 Suggestion: Verify module name or install with 'pip install <module>'.\"     elif echo \"$ERROR\" | grep -qi \"NameError\"; then       echo \"💡 Suggestion: Undefined variable — check variable name or scope.\"     elif echo \"$ERROR\" | grep -qi \"TypeError\"; then       echo \"💡 Suggestion: Wrong data type — verify function arguments.\"     elif echo \"$ERROR\" | grep -qi \"ValueError\"; then       echo \"💡 Suggestion: Invalid value — validate input parameters.\"     elif echo \"$ERROR\" | grep -qi \"IndexError\"; then       echo \"💡 Suggestion: List index out of range — review loops and indexes.\"     else       echo \"💡 Suggestion: Review app.log for more details.\"     fi      echo \"🩹 Saving crash log to debug_report.txt\"     {       echo \"---- DEBUG REPORT ($TIMESTAMP) ----\"       tail -n 20 app.log       echo \"----------------------------------\"     } >> debug_report.txt      echo \"🔁 Rebooting in 5 seconds...\"     sleep 5    else     echo \"✅ App ran successfully at $TIMESTAMP\"     echo \"🧭 Checking Git repository status...\"     git fetch origin main > /dev/null 2>&1      if ! git pull --rebase > git_error.log 2>&1; then       echo \"⚠️ Git pull failed — logged to git_error.log\"     fi      if ! git diff --quiet; then       echo \"💾 Detected local code changes — preparing safe commit...\"       git add . > /dev/null 2>&1       if git commit -m \"Auto-fix detected at $TIMESTAMP\" > /dev/null 2>&1; then         echo \"✅ Commit created. Attempting push...\"         if ! git push origin main > git_error.log 2>&1; then           echo \"⚠️ Git push failed — logged to git_error.log\"         else           echo \"🚀 Successfully pushed latest stable version to GitHub!\"         fi       else         echo \"⚠️ Nothing new to commit.\"       fi     else       echo \"✔️ No new changes detected.\"     fi      echo \"🕵️ Monitoring for file changes...\"     inotifywait -e modify,create,delete -r . >/dev/null 2>&1     echo \"🔁 Change detected — restarting...\"   fi done"
 
 [[ports]]
 localPort = 5000
