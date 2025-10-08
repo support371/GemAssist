@@ -1,3 +1,4 @@
+
 /**
  * GEM Enterprise - AI Media Generation Frontend
  * Enterprise-grade JavaScript for automated content creation
@@ -7,7 +8,7 @@
 // Configuration
 const CONFIG = {
     API_BASE_URL: '/api/media',
-    GENERATED_ASSETS_PATH: '/generated-assets',
+    GENERATED_ASSETS_PATH: '/static/generated-assets',
     MAX_RETRIES: 3,
     RETRY_DELAY: 2000,
     POLLING_INTERVAL: 5000
@@ -30,10 +31,9 @@ const log = (level, message, data = {}) => {
 // Show loading state
 const showLoading = (elementId, message = 'Processing...') => {
     const loadingElement = document.getElementById(elementId);
-    const messageElement = loadingElement?.querySelector('.loading-message');
-    
     if (loadingElement) {
         loadingElement.classList.add('active');
+        const messageElement = loadingElement.querySelector('.loading-message');
         if (messageElement) {
             messageElement.textContent = message;
         }
@@ -117,10 +117,6 @@ const saveSnippetToFile = async (fileName, snippet, assetType) => {
     try {
         const snippetFileName = `${fileName.replace(/\.[^/.]+$/, "")}_snippet.html`;
         
-        // This would typically be handled by the backend to write files
-        // For now, we'll just log it and store in memory
-        log('info', `HTML snippet generated for ${fileName}`, { snippet, fileName: snippetFileName });
-        
         // Store in generated assets array
         generatedAssets.push({
             fileName: snippetFileName,
@@ -130,6 +126,8 @@ const saveSnippetToFile = async (fileName, snippet, assetType) => {
             assetType,
             timestamp: new Date().toISOString()
         });
+        
+        log('info', `HTML snippet generated for ${fileName}`, { snippet, fileName: snippetFileName });
         
     } catch (error) {
         log('error', 'Failed to save HTML snippet', { error: error.message, fileName });
@@ -188,7 +186,7 @@ const apiRequest = async (endpoint, data, method = 'POST') => {
 const generateImage = async () => {
     const prompt = document.getElementById('image-prompt')?.value?.trim();
     const size = document.getElementById('image-size')?.value || '1024x1024';
-    const imageStyle = document.getElementById('image-style')?.value || 'vivid';
+    const style = document.getElementById('image-style')?.value || 'vivid';
     
     if (!prompt) {
         showError('image-error', 'Please enter an image description');
@@ -201,17 +199,15 @@ const generateImage = async () => {
         const result = await apiRequest('/image', {
             prompt,
             size,
-            style: imageStyle,
-            quality: 'hd'
+            style
         });
         
-        if (result.success && result.data) {
-            const { fileName, localPath } = result.data;
-            showPreview('image-preview', localPath, fileName, 'image');
-            showSuccess('image-success', `Image generated successfully: ${fileName}`);
+        if (result.success && result.url) {
+            showPreview('image-preview', result.url, result.metadata?.filename || 'generated_image.png', 'image');
+            showSuccess('image-success', `Image generated successfully!`);
             
             // Add to assets history
-            addToAssetsHistory(fileName, 'image', localPath);
+            addToAssetsHistory(result.metadata?.filename || 'generated_image.png', 'image', result.url);
         } else {
             throw new Error(result.error || 'Image generation failed');
         }
@@ -227,7 +223,6 @@ const generateImage = async () => {
 const generateVideo = async () => {
     const prompt = document.getElementById('video-prompt')?.value?.trim();
     const duration = parseInt(document.getElementById('video-duration')?.value) || 4;
-    const quality = document.getElementById('video-quality')?.value || 'standard';
     
     if (!prompt) {
         showError('video-error', 'Please enter a video description');
@@ -235,39 +230,67 @@ const generateVideo = async () => {
     }
     
     try {
-        showLoading('video-loading', 'Generating your professional video (this may take several minutes)...');
-        
-        const dimensions = quality === 'hd' ? { width: 1280, height: 720 } : { width: 1024, height: 576 };
+        showLoading('video-loading', 'Starting video generation (this may take several minutes)...');
         
         const result = await apiRequest('/video', {
             prompt,
-            duration,
-            ...dimensions
+            duration
         });
         
-        if (result.success && result.data) {
-            const { fileName, localPath } = result.data;
-            showPreview('video-preview', localPath, fileName, 'video');
-            showSuccess('video-success', `Video generated successfully: ${fileName}`);
-            
-            // Add to assets history
-            addToAssetsHistory(fileName, 'video', localPath);
+        if (result.success && result.prediction_id) {
+            // Poll for video completion
+            await pollVideoStatus(result.prediction_id);
         } else {
             throw new Error(result.error || 'Video generation failed');
         }
         
     } catch (error) {
         showError('video-error', `Video generation failed: ${error.message}`);
-    } finally {
         hideLoading('video-loading');
     }
+};
+
+// Poll video generation status
+const pollVideoStatus = async (predictionId) => {
+    const maxAttempts = 60; // 5 minutes timeout
+    let attempts = 0;
+    
+    const checkStatus = async () => {
+        try {
+            const result = await apiRequest(`/video/status/${predictionId}`, {}, 'GET');
+            
+            if (result.success) {
+                if (result.status === 'completed' && result.url) {
+                    showPreview('video-preview', result.url, result.metadata?.filename || 'generated_video.mp4', 'video');
+                    showSuccess('video-success', `Video generated successfully!`);
+                    hideLoading('video-loading');
+                    return;
+                } else if (result.status === 'failed') {
+                    throw new Error('Video generation failed');
+                } else if (result.status === 'processing' && attempts < maxAttempts) {
+                    attempts++;
+                    setTimeout(checkStatus, 5000);
+                    return;
+                }
+            }
+            
+            if (attempts >= maxAttempts) {
+                throw new Error('Video generation timeout');
+            }
+            
+        } catch (error) {
+            showError('video-error', `Video generation failed: ${error.message}`);
+            hideLoading('video-loading');
+        }
+    };
+    
+    checkStatus();
 };
 
 // Generate Text-to-Speech
 const generateTTS = async () => {
     const text = document.getElementById('tts-text')?.value?.trim();
-    const voice = document.getElementById('tts-voice')?.value || 'Rachel';
-    const model = document.getElementById('tts-model')?.value || 'eleven_monolingual_v1';
+    const voice = document.getElementById('tts-voice')?.value || 'default';
     
     if (!text) {
         showError('tts-error', 'Please enter text to convert to speech');
@@ -284,17 +307,15 @@ const generateTTS = async () => {
         
         const result = await apiRequest('/tts', {
             text,
-            voice,
-            model
+            voice
         });
         
-        if (result.success && result.data) {
-            const { fileName, localPath } = result.data;
-            showPreview('tts-preview', localPath, fileName, 'tts');
-            showSuccess('tts-success', `Audio generated successfully: ${fileName}`);
+        if (result.success && result.url) {
+            showPreview('tts-preview', result.url, result.metadata?.filename || 'generated_audio.mp3', 'tts');
+            showSuccess('tts-success', `Audio generated successfully!`);
             
             // Add to assets history
-            addToAssetsHistory(fileName, 'audio', localPath);
+            addToAssetsHistory(result.metadata?.filename || 'generated_audio.mp3', 'audio', result.url);
         } else {
             throw new Error(result.error || 'TTS generation failed');
         }
@@ -309,8 +330,7 @@ const generateTTS = async () => {
 // Send Chat Message
 const sendChatMessage = async () => {
     const message = document.getElementById('chat-message')?.value?.trim();
-    const context = document.getElementById('chat-context')?.value || 'enterprise';
-    const conversationId = document.getElementById('conversation-id')?.value?.trim() || `conv_${Date.now()}`;
+    const sessionId = document.getElementById('conversation-id')?.value?.trim() || `conv_${Date.now()}`;
     
     if (!message) {
         showError('chat-error', 'Please enter a message');
@@ -322,20 +342,19 @@ const sendChatMessage = async () => {
         
         const result = await apiRequest('/chat', {
             message,
-            context,
-            conversationId
+            session_id: sessionId
         });
         
-        if (result.success && result.data) {
+        if (result.success && result.response) {
             const responseElement = document.getElementById('chat-response');
             if (responseElement) {
-                responseElement.textContent = result.data.response;
+                responseElement.textContent = result.response;
             }
             
             document.getElementById('chat-preview').classList.add('active');
-            document.getElementById('conversation-id').value = conversationId;
+            document.getElementById('conversation-id').value = sessionId;
             
-            showSuccess('chat-success', `Response generated (Conversation: ${conversationId})`);
+            showSuccess('chat-success', `Response generated (Session: ${sessionId})`);
         } else {
             throw new Error(result.error || 'Chat processing failed');
         }
@@ -369,27 +388,26 @@ const placeVoiceCall = async () => {
         showLoading('call-loading', 'Placing professional voice call...');
         
         const result = await apiRequest('/call/place', {
-            to: phoneNumber,
+            to_number: phoneNumber,
             message,
             voice
         });
         
-        if (result.success && result.data) {
-            const { callSid, status, to } = result.data;
+        if (result.success && result.call_sid) {
             const statusElement = document.getElementById('call-status');
             
             if (statusElement) {
                 statusElement.innerHTML = `
-                    <strong>Call Status:</strong> ${status}<br>
-                    <strong>Call ID:</strong> ${callSid}<br>
-                    <strong>To:</strong> ${to}<br>
+                    <strong>Call Status:</strong> ${result.status}<br>
+                    <strong>Call ID:</strong> ${result.call_sid}<br>
+                    <strong>To:</strong> ${result.to_number}<br>
                     <strong>Voice:</strong> ${voice}<br>
                     <strong>Time:</strong> ${new Date().toLocaleString()}
                 `;
             }
             
             document.getElementById('call-preview').classList.add('active');
-            showSuccess('call-success', `Call placed successfully to ${to}`);
+            showSuccess('call-success', `Call placed successfully to ${result.to_number}`);
         } else {
             throw new Error(result.error || 'Voice call failed');
         }
@@ -420,14 +438,14 @@ const checkSystemStatus = async () => {
                             <li><i class="fas fa-${services.elevenlabs ? 'check text-success' : 'times text-danger'}"></i> ElevenLabs: ${services.elevenlabs ? 'Connected' : 'Disconnected'}</li>
                             <li><i class="fas fa-${services.replicate ? 'check text-success' : 'times text-danger'}"></i> Replicate: ${services.replicate ? 'Connected' : 'Disconnected'}</li>
                             <li><i class="fas fa-${services.twilio ? 'check text-success' : 'times text-danger'}"></i> Twilio: ${services.twilio ? 'Connected' : 'Disconnected'}</li>
-                            <li><i class="fas fa-${services.aws ? 'check text-success' : 'times text-danger'}"></i> AWS S3: ${services.aws ? 'Connected' : 'Disconnected'}</li>
+                            <li><i class="fas fa-${services.s3 ? 'check text-success' : 'times text-danger'}"></i> AWS S3: ${services.s3 ? 'Connected' : 'Disconnected'}</li>
                         </ul>
                     </div>
                     <div class="col-md-6">
                         <h6>System Info:</h6>
                         <ul class="list-unstyled">
                             <li><strong>Status:</strong> ${result.status || 'Unknown'}</li>
-                            <li><strong>Version:</strong> ${result.version || '1.0.0'}</li>
+                            <li><strong>Timestamp:</strong> ${result.timestamp || new Date().toISOString()}</li>
                             <li><strong>Last Check:</strong> ${new Date().toLocaleString()}</li>
                         </ul>
                     </div>
@@ -491,7 +509,6 @@ document.addEventListener('DOMContentLoaded', function() {
         ttsTextarea.addEventListener('input', function() {
             const current = this.value.length;
             const max = 2000;
-            // Add character counter if needed
             log('debug', `TTS text length: ${current}/${max}`);
         });
     }
